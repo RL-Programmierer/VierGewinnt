@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Guttt" />
+    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Soon....">
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -150,7 +152,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703018270700</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Soon....">
+      <option name="closed" value="true" />
+      <created>1703018514355</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1703018514355</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -174,6 +184,7 @@
     <MESSAGE value="Commit2" />
     <MESSAGE value="Commit1" />
     <MESSAGE value="Guttt" />
-    <option name="LAST_COMMIT_MESSAGE" value="Guttt" />
+    <MESSAGE value="Soon...." />
+    <option name="LAST_COMMIT_MESSAGE" value="Soon...." />
   </component>
 </project>
