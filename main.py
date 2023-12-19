@@ -51,7 +51,7 @@ tf_player2 = Entry(gui)
 tf_player2.pack()
 tf_player2.place(x=175, y=170)
 
-nameplayer1 = Player("yellow", tf_player1.get())
-nameplayer2 = Player("red", tf_player2.get())
+player1 = Player("yellow", tf_player1.get())
+player2 = Player("red", tf_player2.get())
 
 gui.mainloop()
