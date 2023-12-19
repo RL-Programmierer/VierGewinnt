@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Player Class">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Just a simple Test" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -169,7 +166,31 @@
       <option name="project" value="LOCAL" />
       <updated>1703018764442</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="More Player related Stuff">
+      <option name="closed" value="true" />
+      <created>1703019839205</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1703019839205</updated>
+    </task>
+    <task id="LOCAL-00016" summary="More Player related Stuff">
+      <option name="closed" value="true" />
+      <created>1703020263113</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1703020263113</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Just a simple Test">
+      <option name="closed" value="true" />
+      <created>1703020278805</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1703020278805</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -195,6 +216,9 @@
     <MESSAGE value="Guttt" />
     <MESSAGE value="Soon...." />
     <MESSAGE value="Player Class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Player Class" />
+    <MESSAGE value="Just a Test" />
+    <MESSAGE value="More Player related Stuff" />
+    <MESSAGE value="Just a simple Test" />
+    <option name="LAST_COMMIT_MESSAGE" value="Just a simple Test" />
   </component>
 </project>
