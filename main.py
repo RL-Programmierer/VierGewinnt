@@ -27,8 +27,6 @@ def start():
 
 
 
-
-
 tf_player1 = Entry(gui)
 tf_player1.pack()
 tf_player1.place(x=175,y=70)
