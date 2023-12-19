@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Just a simple Test" />
+    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Player Color">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -190,7 +193,23 @@
       <option name="project" value="LOCAL" />
       <updated>1703020278805</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Vier Gewinnt">
+      <option name="closed" value="true" />
+      <created>1703020395658</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1703020395658</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Player Color">
+      <option name="closed" value="true" />
+      <created>1703020472135</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1703020472135</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -219,6 +238,8 @@
     <MESSAGE value="Just a Test" />
     <MESSAGE value="More Player related Stuff" />
     <MESSAGE value="Just a simple Test" />
-    <option name="LAST_COMMIT_MESSAGE" value="Just a simple Test" />
+    <MESSAGE value="Vier Gewinnt" />
+    <MESSAGE value="Player Color" />
+    <option name="LAST_COMMIT_MESSAGE" value="Player Color" />
   </component>
 </project>

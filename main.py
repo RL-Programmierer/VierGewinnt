@@ -32,13 +32,13 @@ myCanvas.create_oval(100, 50, 160, 110, fill="yellow")
 myCanvas.create_oval(100, 150, 160, 210, fill="red")
 
 
-def start():
+def startThis():
     print('Sehr Gutt')
 
 
 but1 = Button(gui, width=20, height=6)
 but1["text"] = "Start"
-but1["command"] = start()
+but1["command"] = startThis()
 but1.pack()
 
 but1.place(x=275, y=300)
