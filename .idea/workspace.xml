@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Soon....">
+    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Player Class">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -160,7 +161,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703018514355</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Player Class">
+      <option name="closed" value="true" />
+      <created>1703018764442</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1703018764442</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -185,6 +194,7 @@
     <MESSAGE value="Commit1" />
     <MESSAGE value="Guttt" />
     <MESSAGE value="Soon...." />
-    <option name="LAST_COMMIT_MESSAGE" value="Soon...." />
+    <MESSAGE value="Player Class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Player Class" />
   </component>
 </project>
