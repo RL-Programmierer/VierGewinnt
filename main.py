@@ -24,7 +24,7 @@ but1.place(x=275, y=300)
 
 
 def start():
-    print('test222')
+    print('ok')
 
 
 tf_player1 = Entry(gui)
