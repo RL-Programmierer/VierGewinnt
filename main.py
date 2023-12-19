@@ -3,19 +3,19 @@ from pygame import *
 
 gui = Tk()
 gui.geometry('750x500')
-gui.title('Start')
+gui.title('VierGewinnt')
 
 
 class Player:
     verticalRow = 0
     horizontalRow = 0
-    color = ""
+    playerColor = ""
     name = ""
 
-    def __init__(self, color, name):
+    def __init__(self, playerColor, name):
         self.verticalRow = 0
         self.horizontalRow = 0
-        self.color = color
+        self.playerColor = playerColor
         self.name = name
 
     def move(self, verticalRow, horizontalRow):
