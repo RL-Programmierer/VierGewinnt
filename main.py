@@ -3,7 +3,7 @@ from tkinter import *
 gui = Tk()
 gui.geometry('750x500')
 gui.title('Start')
-import time, tkinter
+
 nameplayer1=0
 nameplayer2=0
 
