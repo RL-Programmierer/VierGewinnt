@@ -33,7 +33,7 @@ myCanvas.create_oval(100, 150, 160, 210, fill="red")
 
 
 def startGame():
-    print('Sehr Gutt')
+    print('Test')
 
 
 but1 = Button(gui, width=20, height=6)
