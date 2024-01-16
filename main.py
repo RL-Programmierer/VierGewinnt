@@ -5,7 +5,6 @@ w, h = gui.winfo_screenwidth(), gui.winfo_screenheight()
 gui.geometry("%dx%d+0+0" % (w, h))
 gui.title('VierGewinnt')
 
-
 class VierGewinntFeld:
     feld = 0
 
@@ -15,20 +14,25 @@ class VierGewinntFeld:
 
     def createCanvas(self):
         if self.feld == 0:
-            self.feld = Canvas(width=gui.winfo_screenwidth() / self.x, height=gui.winfo_screenheight() / self.y,
+            this_width = 1920 / self.x
+            this_height = 1080 / self.y
+            self.feld = Canvas(width=this_width, height=this_height,
                                bg='yellow', highlightthickness=5, highlightbackground="black")
             self.feld.pack(expand=YES, fill=BOTH)
         return self.feld
 
 
 class Player:
-    playerField = VierGewinntFeld(0, 0)
+    spielerFeld = VierGewinntFeld(0, 0)
     playerColor = ""
     name = ""
 
     def __init__(self, playerColor, name):
         self.playerColor = playerColor
         self.name = name
+
+    def setPlayerField(self, spielerFeld):
+        self.spielerFeld = spielerFeld
 
 
 # Kreise im Startgame Bildschirm
@@ -85,9 +89,12 @@ def setupPlayerListBar():
 def setupSpielFeld():
     # ToDo: implement this
 
-    for x in range(verticalFeldNumber):
+    for ix in range(verticalFeldNumber):
+        x = ix + 1
+
         print(x)
-        for y in range(horizontalFeldNumber):
+        for iy in range(horizontalFeldNumber):
+            y = iy + 1
             feld = VierGewinntFeld(x, y)
             feld.createCanvas()
             spielfeld.append(feld)
