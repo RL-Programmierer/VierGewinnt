@@ -83,7 +83,9 @@ spielfeld = []
 def setupPlayerListBar(background):
 
     background.create_rectangle(0, 0, 1920, 60, fill="#585B5F")
-    background.create_text(50,70, text=player1.name , fill='#000000')
+    background.create_text(820,30, text='player1.name' , fill='#000000',font=('Purisa', 18))
+    background.create_text(960,30, text='-' , fill='#000000',font=('Purisa', 22))
+    background.create_text(1100,30, text='player2.name' , fill='#000000',font=('Purisa', 18))
 
 
 
