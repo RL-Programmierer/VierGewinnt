@@ -50,7 +50,7 @@ oval2 = background_start.create_oval(100, 150, 160, 210, fill="red")
 but1 = Button(gui, width=20, height=6, bg='grey')
 but1["text"] = "Start"
 but1["command"] = lambda: startGame()
-but1.place(x=20, y=540)
+but1.place(x=920, y=540)
 
 tf_player1 = Entry(gui, bg='grey')
 tf_player1.place(x=175, y=70)
