@@ -5,6 +5,7 @@ w, h = gui.winfo_screenwidth(), gui.winfo_screenheight()
 gui.geometry("%dx%d+0+0" % (w, h))
 gui.title('VierGewinnt')
 
+
 class VierGewinntFeld:
     feld = 0
 
@@ -61,7 +62,6 @@ tf_player2.place(x=175, y=170)
 player1 = Player("yellow", tf_player1.get())
 player2 = Player("red", tf_player2.get())
 
-# Test
 
 def startGame():
     background_start.delete(oval1)
