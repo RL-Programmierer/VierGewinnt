@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="startbildschirm buttonverschiebung2">
+    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="last Commit for today">
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/viergewintt.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -262,31 +265,7 @@
       <option name="project" value="LOCAL" />
       <updated>1703021546571</updated>
     </task>
-    <task id="LOCAL-00023" summary="startbildschirm buttonverschiebung">
-      <option name="closed" value="true" />
-      <created>1705501665604</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1705501665604</updated>
-    </task>
-    <task id="LOCAL-00024" summary="startbildschirm buttonverschiebung">
-      <option name="closed" value="true" />
-      <created>1705501702233</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1705501702233</updated>
-    </task>
-    <task id="LOCAL-00025" summary="startbildschirm buttonverschiebung2">
-      <option name="closed" value="true" />
-      <created>1705501782444</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1705501782444</updated>
-    </task>
-    <option name="localTasksCounter" value="26" />
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -320,8 +299,6 @@
     <MESSAGE value="Fixes" />
     <MESSAGE value="startGame()" />
     <MESSAGE value="last Commit for today" />
-    <MESSAGE value="startbildschirm buttonverschiebung" />
-    <MESSAGE value="startbildschirm buttonverschiebung2" />
-    <option name="LAST_COMMIT_MESSAGE" value="startbildschirm buttonverschiebung2" />
+    <option name="LAST_COMMIT_MESSAGE" value="last Commit for today" />
   </component>
 </project>

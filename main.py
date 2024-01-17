@@ -38,7 +38,7 @@ background_start = Canvas(width=canvas_width, height=canvas_height, bg='grey')
 background_start.pack(expand=YES, fill=BOTH)
 oval1 = background_start.create_oval(100, 50, 160, 110, fill="yellow")
 oval2 = background_start.create_oval(100, 150, 160, 210, fill="red")
-background_start.create_text(600, 250, text="VierGewinnt", fill="black", font=("Purisa", 100))
+background_start.create_text(960, 200, text="VierGewinnt", fill="black", font=("Purisa", 100))
 
 # Button und Textfeld code(Startbildschirm)
 
