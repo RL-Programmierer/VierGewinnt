@@ -13,13 +13,12 @@ class VierGewinntFeld:
         self.x = x
         self.y = y
 
-    def createCanvas(self):
+    def createCanvas(self, background):
         if self.feld == 0:
             this_width = 1920 / self.x
             this_height = 1080 / self.y
-            self.feld = Canvas(width=this_width, height=this_height,
-                               bg='yellow', highlightthickness=5, highlightbackground="black")
-            self.feld.pack(expand=YES, fill=BOTH)
+            self.feld = background.create_rectangle(this_height - 5, this_height - 5, this_width + 5,
+                                                    this_height + 5)
         return self.feld
 
 
@@ -70,10 +69,10 @@ def startGame():
     tf_player1.destroy()
     tf_player2.destroy()
     but1.destroy()
-    background = Canvas(width=canvas_width, height=canvas_height, bg='grey')
+    background = Canvas(width=gui.winfo_screenwidth(), height=gui.winfo_screenheight(), bg='grey')
     background.pack(expand=YES, fill=BOTH)
-    setupSpielFeld()
-    setupPlayerListBar()
+    setupSpielFeld(background)
+    setupPlayerListBar(background)
 
 
 verticalFeldNumber = 7
@@ -82,12 +81,13 @@ horizontalFeldNumber = 6
 spielfeld = []
 
 
-def setupPlayerListBar():
+def setupPlayerListBar(background):
     # ToDo: füge die Spielerleiste hinzu für das Spiel
+    background.create_rectangle(0, 0, 0, 0, fill="white")
     print("This is work in progress")
 
 
-def setupSpielFeld():
+def setupSpielFeld(background):
     # ToDo: implement this
 
     for ix in range(verticalFeldNumber):
@@ -97,7 +97,7 @@ def setupSpielFeld():
         for iy in range(horizontalFeldNumber):
             y = iy + 1
             feld = VierGewinntFeld(x, y)
-            feld.createCanvas()
+            feld.createCanvas(background)
             spielfeld.append(feld)
             print(y)
     print("Setting Up Spielfeld!")
