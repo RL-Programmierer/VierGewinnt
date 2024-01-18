@@ -4,6 +4,7 @@ gui = Tk()
 w, h = gui.winfo_screenwidth(), gui.winfo_screenheight()
 gui.geometry("%dx%d+0+0" % (w, h))
 gui.title('VierGewinnt')
+activeplayer = 1
 
 
 class VierGewinntFeld:
@@ -74,6 +75,7 @@ def startGame():
         setupPlayerListBar(background)
         tf_player1.destroy()
         tf_player2.destroy()
+        endButton()
     else:
         print("Keine Namen sind gesetzt")
 
@@ -86,9 +88,18 @@ spielfeld = []
 
 def setupPlayerListBar(background):
     background.create_rectangle(0, 0, 1920, 60, fill="#585B5F")
-    background.create_text(820, 30, text=getPlayer1().name, fill='#000000', font=('Purisa', 18))
+
+    if activeplayer == 1:
+        background.create_text(820, 30, text=getPlayer1().name, fill='#000000', font=('Purisa', 18))
+    else:
+        background.create_text(820, 30, text=getPlayer1().name, fill='#847B79', font=('Purisa', 18))
+
     background.create_text(960, 30, text='-', fill='#000000', font=('Purisa', 22))
-    background.create_text(1100, 30, text=getPlayer2().name, fill='#000000', font=('Purisa', 18))
+
+    if activeplayer == 2:
+        background.create_text(1100, 30, text=getPlayer2().name, fill='#000000', font=('Purisa', 18))
+    else:
+        background.create_text(1100, 30, text=getPlayer2().name, fill='#847B79', font=('Purisa', 18))
 
 
 def setupSpielFeld(background):
@@ -105,6 +116,87 @@ def setupSpielFeld(background):
             spielfeld.append(feld)
             print(y)
     print("Setting Up Spielfeld!")
+
+
+def endButton():
+    but2 = Button(gui, width=10, height=3, bg='grey')
+    but2["text"] = "Start"
+    but2["command"] = lambda: restartGame()
+    but2.place(x=900, y=920)
+
+
+#bei game reset
+def restartGame():
+    canvas_width = 200
+    canvas_height = 40
+
+    background_start = Canvas(width=canvas_width, height=canvas_height, bg='grey')
+    background_start.pack(expand=YES, fill=BOTH)
+    oval1 = background_start.create_oval(100, 50, 160, 110, fill="yellow")
+    oval2 = background_start.create_oval(100, 150, 160, 210, fill="red")
+    background_start.create_text(960, 200, text="VierGewinnt", fill="black", font=("Purisa", 100))
+
+    # Button und Textfeld code(Startbildschirm)
+
+    but1 = Button(gui, width=20, height=6, bg='grey')
+    but1["text"] = "Start"
+    but1["command"] = lambda: startGame()
+    but1.place(x=920, y=540)
+
+    tf_player1 = Entry(gui, bg='grey')
+    tf_player1.place(x=175, y=70)
+
+    tf_player2 = Entry(gui, bg='grey')
+    tf_player2.place(x=175, y=170)
+
+    # Kreise im Startgame Bildschirm
+    canvas_width = 200
+    canvas_height = 40
+
+    background_start = Canvas(width=canvas_width, height=canvas_height, bg='grey')
+    background_start.pack(expand=YES, fill=BOTH)
+    oval1 = background_start.create_oval(100, 50, 160, 110, fill="yellow")
+    oval2 = background_start.create_oval(100, 150, 160, 210, fill="red")
+    background_start.create_text(960, 200, text="VierGewinnt", fill="black", font=("Purisa", 100))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 gui.mainloop()
