@@ -6,8 +6,11 @@ gui.geometry("%dx%d+0+0" % (w, h))
 gui.title('VierGewinnt')
 activeplayer = 1
 
+print(gui.winfo_screenwidth())
+print(gui.winfo_screenheight())
 
-size = 100
+
+size = 130
 
 # Repräsentiert ein Feld
 class VierGewinntFeld:
@@ -19,14 +22,11 @@ class VierGewinntFeld:
 
     def createCanvas(self, background):
         if self.feld == 0:
-            this_width = size * self.feldX
-            this_height = size * self.feldY
+            feld_y = size * self.feldX
+            feld_x = 375 + size * self.feldY
 
-            print("width: ", this_width)
-            print("height: ", this_height)
-
-            self.feld = background.create_rectangle(this_height, this_height, this_width + size,
-                                                    this_height + size, fill="white")
+            self.feld = background.create_rectangle(feld_x, feld_y, feld_x + size,
+                                                    feld_y + size, fill="white")
         return self.feld
 
 # Repräsentiert einen Spieler
@@ -94,8 +94,8 @@ def startGame():
         print("Keine Namen sind gesetzt")
 
 
-verticalFeldNumber = 8
 horizontalFeldNumber = 7
+verticalFeldNumber = 8
 
 spielfeld = []
 
@@ -117,16 +117,13 @@ def setupPlayerListBar(background):
 
 
 def setupSpielFeld(background):
-    # ToDo: implement this
-
     # x Koordinate Berechnung
-    for x in range(1, verticalFeldNumber):
+    for x in range(1, horizontalFeldNumber):
         # y Koordinate Berechnung
-        for y in range(1, horizontalFeldNumber):
+        for y in range(1, verticalFeldNumber):
             feld = VierGewinntFeld(x, y)
             feld.createCanvas(background)
             spielfeld.append(feld)
-    print("Setting Up Spielfeld!")
 
 
 def endButton():
