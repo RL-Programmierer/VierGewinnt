@@ -6,13 +6,7 @@ gui.geometry("%dx%d+0+0" % (w, h))
 gui.title('VierGewinnt')
 activeplayer = 1
 
-
-
-
-
 size = 130
-
-
 
 # Repräsentiert ein Feld
 class VierGewinntFeld:
