@@ -6,7 +6,12 @@ gui.geometry("%dx%d+0+0" % (w, h))
 gui.title('VierGewinnt')
 activeplayer = 1
 
+# Feld Größe Einstellung
 size = 130
+
+horizontalFeldNumber = 7
+verticalFeldNumber = 8
+
 
 # Repräsentiert ein Feld
 class VierGewinntFeld:
@@ -18,7 +23,7 @@ class VierGewinntFeld:
 
     def createCanvas(self, background):
         if self.feld == 0:
-            feld_y = size * self.feldX
+            feld_y = 50 + size * self.feldX
             feld_x = 375 + size * self.feldY
 
             self.feld = background.create_rectangle(feld_x, feld_y, feld_x + size,
@@ -96,9 +101,6 @@ def startGame():
         print("Keine Namen sind gesetzt")
 
 
-horizontalFeldNumber = 7
-verticalFeldNumber = 8
-
 spielfeld = []
 
 
@@ -110,9 +112,8 @@ def setupPlayerListBar(background):
 
     var1 = background.create_rectangle(0, 0, 1920, 60, fill="#585B5F")
 
-
     if activeplayer == 1:
-       var2 = background.create_text(820, 30, text=getPlayer1().name, fill='#000000', font=('Purisa', 18))
+        var2 = background.create_text(820, 30, text=getPlayer1().name, fill='#000000', font=('Purisa', 18))
     else:
         var3 = background.create_text(820, 30, text=getPlayer1().name, fill='#847B79', font=('Purisa', 18))
 
@@ -143,9 +144,6 @@ def restartGame(background):
     global var3
     global var4
 
-    canvas_width = 200
-    canvas_height = 40
-
     # Button und Textfeld code(Startbildschirm)
 
     but1 = Button(gui, width=20, height=6, bg='grey')
@@ -159,10 +157,6 @@ def restartGame(background):
     tf_player2 = Entry(gui, bg='grey')
     tf_player2.place(x=175, y=170)
 
-    # Kreise im Startgame Bildschirm
-    canvas_width = 200
-    canvas_height = 40
-
     butrestart = Button(gui, width=50, height=10, bg='grey')
     butrestart["text"] = "Start"
     butrestart["command"] = lambda: restartGame()
@@ -172,7 +166,6 @@ def restartGame(background):
     background.delete(var2)
     background.delete(var3)
     background.delete(var4)
-
 
 
 gui.mainloop()
