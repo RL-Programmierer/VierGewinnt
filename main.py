@@ -6,11 +6,13 @@ gui.geometry("%dx%d+0+0" % (w, h))
 gui.title('VierGewinnt')
 activeplayer = 1
 
-print(gui.winfo_screenwidth())
-print(gui.winfo_screenheight())
+
+
 
 
 size = 130
+
+
 
 # Repräsentiert ein Feld
 class VierGewinntFeld:
@@ -28,6 +30,7 @@ class VierGewinntFeld:
             self.feld = background.create_rectangle(feld_x, feld_y, feld_x + size,
                                                     feld_y + size, fill="white")
         return self.feld
+
 
 # Repräsentiert einen Spieler
 class Player:
@@ -89,7 +92,12 @@ def startGame():
         setupPlayerListBar(background)
         tf_player1.destroy()
         tf_player2.destroy()
-        endButton()
+
+        buttemporaer = Button(gui, width=20, height=6, bg='grey')
+        buttemporaer["text"] = "temporaer"
+        buttemporaer["command"] = lambda: restartGame(background)
+        buttemporaer.place(x=1020, y=740)
+
     else:
         print("Keine Namen sind gesetzt")
 
@@ -101,14 +109,20 @@ spielfeld = []
 
 
 def setupPlayerListBar(background):
-    background.create_rectangle(0, 0, 1920, 60, fill="#585B5F")
+    global var1
+    global var2
+    global var3
+    global var4
+
+    var1 = background.create_rectangle(0, 0, 1920, 60, fill="#585B5F")
+
 
     if activeplayer == 1:
-        background.create_text(820, 30, text=getPlayer1().name, fill='#000000', font=('Purisa', 18))
+       var2 = background.create_text(820, 30, text=getPlayer1().name, fill='#000000', font=('Purisa', 18))
     else:
-        background.create_text(820, 30, text=getPlayer1().name, fill='#847B79', font=('Purisa', 18))
+        var3 = background.create_text(820, 30, text=getPlayer1().name, fill='#847B79', font=('Purisa', 18))
 
-    background.create_text(960, 30, text='-', fill='#000000', font=('Purisa', 22))
+    var4 = background.create_text(960, 30, text='-', fill='#000000', font=('Purisa', 22))
 
     if activeplayer == 2:
         background.create_text(1100, 30, text=getPlayer2().name, fill='#000000', font=('Purisa', 18))
@@ -126,23 +140,17 @@ def setupSpielFeld(background):
             spielfeld.append(feld)
 
 
-def endButton():
-    but2 = Button(gui, width=10, height=3, bg='grey')
-    but2["text"] = "Start"
-    but2["command"] = lambda: restartGame()
-    but2.place(x=900, y=920)
+# bei game reset
 
 
-#bei game reset
-def restartGame():
+def restartGame(background):
+    global var1
+    global var2
+    global var3
+    global var4
+
     canvas_width = 200
     canvas_height = 40
-
-    background_start = Canvas(width=canvas_width, height=canvas_height, bg='grey')
-    background_start.pack(expand=YES, fill=BOTH)
-    oval1 = background_start.create_oval(100, 50, 160, 110, fill="yellow")
-    oval2 = background_start.create_oval(100, 150, 160, 210, fill="red")
-    background_start.create_text(960, 200, text="VierGewinnt", fill="black", font=("Purisa", 100))
 
     # Button und Textfeld code(Startbildschirm)
 
@@ -161,49 +169,15 @@ def restartGame():
     canvas_width = 200
     canvas_height = 40
 
-    background_start = Canvas(width=canvas_width, height=canvas_height, bg='grey')
-    background_start.pack(expand=YES, fill=BOTH)
-    oval1 = background_start.create_oval(100, 50, 160, 110, fill="yellow")
-    oval2 = background_start.create_oval(100, 150, 160, 210, fill="red")
-    background_start.create_text(960, 200, text="VierGewinnt", fill="black", font=("Purisa", 100))
+    butrestart = Button(gui, width=50, height=10, bg='grey')
+    butrestart["text"] = "Start"
+    butrestart["command"] = lambda: restartGame()
+    butrestart.place(x=820, y=500)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    background.delete(var1)
+    background.delete(var2)
+    background.delete(var3)
+    background.delete(var4)
 
 
 
