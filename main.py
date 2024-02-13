@@ -21,6 +21,7 @@ roundNumber = 0
 
 class PlayerListBar:
     def __init__(self, background):
+        # ToDo: Besprechen, ob Grau die Farbe des Spielers ist, der gerade an der Reihe ist oder nicht
         global spielerAnDerReihe
         self.background = background
         self.Rechteck = background.create_rectangle(0, 0, 1920, 60, fill="#585B5F")
@@ -49,11 +50,11 @@ class PlayerListBar:
             print('Error!!! SpielerAnDerReihe:', spielerAnDerReihe)
 
         if spielerAnDerReihe == 1:
-            self.background.itemconfig(self.Spieler1, fill='#847B79')
-            self.background.itemconfig(self.Spieler2, fill='#000000')
-        elif spielerAnDerReihe == 2:
             self.background.itemconfig(self.Spieler1, fill='#000000')
             self.background.itemconfig(self.Spieler2, fill='#847B79')
+        elif spielerAnDerReihe == 2:
+            self.background.itemconfig(self.Spieler1, fill='#847B79')
+            self.background.itemconfig(self.Spieler2, fill='#000000')
 
 
 # Repräsentiert ein Feld
