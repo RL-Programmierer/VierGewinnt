@@ -1,4 +1,5 @@
 from tkinter import *
+import random
 
 gui = Tk()
 w, h = gui.winfo_screenwidth(), gui.winfo_screenheight()
@@ -171,6 +172,7 @@ def nextRound():
     roundNumber = roundNumber + 1
     print('Round Number:', roundNumber)
     playerListBar.tauscheSpielerAnDerReihe()
+    getFeldFromIndex(random.randint(0, len(spielfeld))).setColor('green')
 
 
 def setupSpielFeld(background):
@@ -184,9 +186,13 @@ def setupSpielFeld(background):
                 feld.setColor('yellow')
 
 
-# bei game reset
+def getFeldFromIndex(index):
+    for i, j in enumerate(spielfeld):
+        if i == index:
+            return j
 
 
+# bei game restart
 def restartGame(background):
     global var1
     global var2
