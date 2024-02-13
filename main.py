@@ -115,9 +115,11 @@ but1.place(x=890, y=540)
 
 tf_player1 = Entry(gui, bg='grey', width=30)
 tf_player1.place(x=950, y=330)
+tf_player1.insert(0, 'Spieler 1')
 
 tf_player2 = Entry(gui, bg='grey', width=30)
 tf_player2.place(x=950, y=430)
+tf_player2.insert(0, 'Spieler 2')
 
 
 def getPlayer1():
