@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Runden Mechanik">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_01_2024_14_38_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_01_2024_14_38__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_01_2024_14_51_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_01_2024_14_51__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_01_2024_14_56_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_01_2024_14_56__Changes_.xml" beforeDir="false" />
+    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Muss nicht mehr da sein">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -316,7 +309,63 @@
       <option name="project" value="LOCAL" />
       <updated>1707856964521</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Klein aber fein">
+      <option name="closed" value="true" />
+      <created>1707857214694</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1707857214694</updated>
+    </task>
+    <task id="LOCAL-00028" summary="klein aber fein">
+      <option name="closed" value="true" />
+      <created>1707857266387</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1707857266387</updated>
+    </task>
+    <task id="LOCAL-00029" summary="klein aber fein">
+      <option name="closed" value="true" />
+      <created>1707857315773</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1707857315773</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Unnötig">
+      <option name="closed" value="true" />
+      <created>1707857621982</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1707857621982</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Wichtig">
+      <option name="closed" value="true" />
+      <created>1707857884404</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1707857884404</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Kleines Easter Egg">
+      <option name="closed" value="true" />
+      <created>1707858612536</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1707858612536</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Muss nicht mehr da sein">
+      <option name="closed" value="true" />
+      <created>1707858834040</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1707858834040</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -331,9 +380,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="First Commit" />
-    <MESSAGE value="Start Screne" />
-    <MESSAGE value="Start Screen" />
     <MESSAGE value="Pls Work" />
     <MESSAGE value="Test2" />
     <MESSAGE value="Commit" />
@@ -353,6 +399,12 @@
     <MESSAGE value="Last Player bar Commit" />
     <MESSAGE value="Organisieren..." />
     <MESSAGE value="Runden Mechanik" />
-    <option name="LAST_COMMIT_MESSAGE" value="Runden Mechanik" />
+    <MESSAGE value="Klein aber fein" />
+    <MESSAGE value="klein aber fein" />
+    <MESSAGE value="Unnötig" />
+    <MESSAGE value="Wichtig" />
+    <MESSAGE value="Kleines Easter Egg" />
+    <MESSAGE value="Muss nicht mehr da sein" />
+    <option name="LAST_COMMIT_MESSAGE" value="Muss nicht mehr da sein" />
   </component>
 </project>

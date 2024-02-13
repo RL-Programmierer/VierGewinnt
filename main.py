@@ -20,6 +20,7 @@ verticalFeldNumber = 8
 roundNumber = 0
 
 
+# Repräsentiert die Spieler Leiste
 class PlayerListBar:
     def __init__(self, background):
         # ToDo: Besprechen, ob Grau die Farbe des Spielers ist, der gerade an der Reihe ist oder nicht
@@ -172,7 +173,9 @@ def nextRound():
     roundNumber = roundNumber + 1
     print('Round Number:', roundNumber)
     playerListBar.tauscheSpielerAnDerReihe()
-    getFeldFromIndex(random.randint(0, len(spielfeld))).setColor('green')
+    feld = getFeldFromIndex(random.randint(0, len(spielfeld)) - 1)
+    if feld is not None:
+        feld.setColor('green')
 
 
 def setupSpielFeld(background):
