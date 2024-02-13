@@ -182,8 +182,6 @@ def setupSpielFeld(background):
         for y in range(1, verticalFeldNumber):
             feld = VierGewinntFeld(background, x, y)
             spielfeld.append(feld)
-            if x == 1:
-                feld.setColor('yellow')
 
 
 def getFeldFromIndex(index):
