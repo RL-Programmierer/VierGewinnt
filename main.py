@@ -208,7 +208,7 @@ def restartGame(background):
     tf_player2.place(x=175, y=170)
 
     butrestart = Button(gui, width=50, height=10, bg='grey')
-    butrestart["text"] = "Start"
+    butrestart["text"] = "Restart"
     butrestart["command"] = lambda: restartGame(background)
     butrestart.place(x=820, y=500)
 
