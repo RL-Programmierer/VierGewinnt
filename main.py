@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter import font as tkFont
 
 gui = Tk()
 w, h = gui.winfo_screenwidth(), gui.winfo_screenheight()
@@ -107,7 +106,6 @@ background_start.create_text(960, 200, text="VierGewinnt", fill="black", font=("
 
 # Button und Textfeld code(Startbildschirm)
 
-helv36 = tkFont.Font(family='Helvetica', size=36, weight='bold')
 but1 = Button(gui, width=30, height=6, bg='grey')
 but1["text"] = "Start"
 but1["command"] = lambda: startGame()
