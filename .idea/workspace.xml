@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Muss nicht mehr da sein">
+    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Quick Fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -365,7 +365,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707858834040</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Quick Fix">
+      <option name="closed" value="true" />
+      <created>1707859147058</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1707859147058</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -380,7 +388,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Pls Work" />
     <MESSAGE value="Test2" />
     <MESSAGE value="Commit" />
     <MESSAGE value="Commit2" />
@@ -405,6 +412,7 @@
     <MESSAGE value="Wichtig" />
     <MESSAGE value="Kleines Easter Egg" />
     <MESSAGE value="Muss nicht mehr da sein" />
-    <option name="LAST_COMMIT_MESSAGE" value="Muss nicht mehr da sein" />
+    <MESSAGE value="Quick Fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Quick Fix" />
   </component>
 </project>

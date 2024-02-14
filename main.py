@@ -2,13 +2,14 @@ from tkinter import *
 import random
 
 gui = Tk()
-w, h = gui.winfo_screenwidth(), gui.winfo_screenheight()
-gui.geometry("%dx%d+0+0" % (w, h))
+width, height = gui.winfo_screenwidth(), gui.winfo_screenheight()
+gui.geometry("%dx%d+0+0" % (width, height))
 gui.title('VierGewinnt')
+# ToDo: Change that to the player class
 spielerAnDerReihe = 1
 
-print('max. Länge:', w)
-print('max. Höhe:', h)
+print('max. Länge:', width)
+print('max. Höhe:', height)
 
 # Feld Größe Einstellung
 size = 130
@@ -61,14 +62,15 @@ class PlayerListBar:
 
 # Repräsentiert ein Feld
 class VierGewinntFeld:
-    farbe = 'white'
+    farbe = 'blue'
 
     def __init__(self, background, feldX, feldY):
+        self.playerNumber = 0
         self.feldX = feldX
         self.feldY = feldY
         self.background = background
 
-        feld_y = 50 + size * self.feldX
+        feld_y = 100 + size * self.feldX
         feld_x = 375 + size * self.feldY
 
         self.feld = background.create_rectangle(feld_x, feld_y, feld_x + size,
@@ -80,6 +82,22 @@ class VierGewinntFeld:
 
     def getColor(self):
         return self.farbe
+
+    def setPlayerNumber(self, numberOfPlayer):
+        self.playerNumber = numberOfPlayer
+
+    def getPlayerNumber(self):
+        return self.playerNumber
+
+    def isEmpty(self):
+        return self.playerNumber == 0
+
+    def placeChip(self, color, playerNumber):
+        self.playerNumber = playerNumber
+        feld_y = 100 + size * self.feldX
+        feld_x = 375 + size * self.feldY
+        offset = 20
+        createPlayerChip(self.background, feld_x + offset, feld_y + offset, size - offset * 2, color)
 
 
 # Repräsentiert einen Spieler
@@ -144,15 +162,17 @@ def startGame():
         tf_player1.destroy()
         tf_player2.destroy()
 
+        createControlButtons()
+
         buttemporaer = Button(gui, width=20, height=6, bg='grey')
         buttemporaer["text"] = "nextRoundTest"
         buttemporaer["command"] = lambda: nextRound()
         buttemporaer.place(x=500, y=740)
 
-        buttemporaer = Button(gui, width=20, height=6, bg='grey')
-        buttemporaer["text"] = "temporaer"
-        buttemporaer["command"] = lambda: restartGame(background)
-        buttemporaer.place(x=1020, y=740)
+        buttemporaer2 = Button(gui, width=20, height=6, bg='grey')
+        buttemporaer2["text"] = "RestartTest"
+        buttemporaer2["command"] = lambda: restartGame(background)
+        buttemporaer2.place(x=1020, y=740)
 
     else:
         print("Keine Namen sind gesetzt")
@@ -173,24 +193,64 @@ def nextRound():
     roundNumber = roundNumber + 1
     print('Round Number:', roundNumber)
     playerListBar.tauscheSpielerAnDerReihe()
-    feld = getFeldFromIndex(random.randint(0, len(spielfeld)) - 1)
+    randomX = random.randint(0, len(spielfeld))
+    feld = getFeld(randomX, random.randint(0, len(getFelderReihe(randomX))))
+
     if feld is not None:
-        feld.setColor('green')
+        feld.placeChip('red', 1)
 
 
 def setupSpielFeld(background):
     # x Koordinate Berechnung
-    for x in range(1, horizontalFeldNumber):
+    for v in range(1, verticalFeldNumber):
         # y Koordinate Berechnung
-        for y in range(1, verticalFeldNumber):
-            feld = VierGewinntFeld(background, x, y)
-            spielfeld.append(feld)
+        horizontalLineList = []
+        for h in range(1, horizontalFeldNumber):
+            feld = VierGewinntFeld(background, h, v)
+            horizontalLineList.append(feld)
+        spielfeld.append(horizontalLineList)
 
 
-def getFeldFromIndex(index):
+def createControlButtons():
+    for y in range(1, verticalFeldNumber):
+        createControlButton(y)
+
+
+def createControlButton(row):
+    button_x = 375 + size * row
+    if row != 1:
+        button_x = button_x + 1
+    controlButton = Button(gui, width=17, height=3, bg='grey')
+    controlButton["text"] = "↓"
+    controlButton["command"] = lambda: handlePlayerChip(row)
+    controlButton.place(x=button_x, y=172)
+
+
+def handlePlayerChip(row):
+    feld = getPositonForChip(row)
+    if feld is not None:
+        feld.placeChip('red', spielerAnDerReihe)
+
+
+def getPositonForChip(row):
+    felderReihe = getFelderReihe(row - 1)
+    for i, feld in enumerate(felderReihe):
+        if feld.isEmpty():
+            return feld
+
+
+def getFelderReihe(index):
     for i, j in enumerate(spielfeld):
         if i == index:
             return j
+
+
+def getFeld(horizontal, vertical):
+    for i, j in enumerate(spielfeld):
+        if i == horizontal:
+            for i2, j2 in enumerate(j):
+                if i2 == vertical:
+                    return j2
 
 
 # bei game restart
