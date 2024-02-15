@@ -1,5 +1,5 @@
 from tkinter import *
-import random
+from tkinter import colorchooser
 
 gui = Tk()
 width, height = gui.winfo_screenwidth(), gui.winfo_screenheight()
@@ -20,6 +20,9 @@ verticalFeldNumber = 8
 
 roundNumber = 0
 
+playerName1 = 'Spieler 1'
+playerName2 = 'Spieler 2'
+
 
 # Repräsentiert die Spieler Leiste
 class PlayerListBar:
@@ -31,24 +34,27 @@ class PlayerListBar:
         self.Bindestrich = background.create_text(960, 30, text='-', fill='#000000', font=('Purisa', 22))
 
         if spielerAnDerReihe == 1:
-            self.Spieler1 = background.create_text(820, 30, text=getPlayer1().name, fill='#000000', font=('Purisa', 18))
+            self.Spieler1 = background.create_text(820, 30, text=player1.name, fill='#000000', font=('Purisa', 18))
         else:
-            self.Spieler1 = background.create_text(820, 30, text=getPlayer1().name, fill='#847B79', font=('Purisa', 18))
+            self.Spieler1 = background.create_text(820, 30, text=player1.name, fill='#847B79', font=('Purisa', 18))
 
         if spielerAnDerReihe == 2:
-            self.Spieler2 = background.create_text(1100, 30, text=getPlayer2().name, fill='#000000',
+            self.Spieler2 = background.create_text(1100, 30, text=player2.name, fill='#000000',
                                                    font=('Purisa', 18))
         else:
-            self.Spieler2 = background.create_text(1100, 30, text=getPlayer2().name, fill='#847B79',
+            self.Spieler2 = background.create_text(1100, 30, text=player2.name, fill='#847B79',
                                                    font=('Purisa', 18))
 
     def tauscheSpielerAnDerReihe(self):
         global spielerAnDerReihe
+        global spielerAnDerReiheObject
 
         if spielerAnDerReihe == 1:
             spielerAnDerReihe = spielerAnDerReihe + 1
+            spielerAnDerReiheObject = player2
         elif spielerAnDerReihe == 2:
             spielerAnDerReihe = spielerAnDerReihe - 1
+            spielerAnDerReiheObject = player1
         else:
             print('Error!!! SpielerAnDerReihe:', spielerAnDerReihe)
 
@@ -107,10 +113,30 @@ class Player:
         self.playerColor = playerColor
         self.name = name
 
+    def getName(self):
+        return self.name
+
+    def getPlayerColor(self):
+        return self.playerColor
+
+    def setPlayerColor(self, playerColor):
+        self.playerColor = playerColor
+
+    def setName(self, name):
+        self.name = name
+
 
 # Kreise im Startgame Bildschirm
 canvas_width = 200
 canvas_height = 40
+
+colorOfPlayer1 = 'red'
+colorOfPlayer2 = 'yellow'
+
+player1 = Player(colorOfPlayer1, playerName1)
+player2 = Player(colorOfPlayer2, playerName2)
+
+spielerAnDerReiheObject = player1
 
 
 # create
@@ -121,8 +147,26 @@ def createPlayerChip(canvas, x, y, chipSize, color):
 
 background_start = Canvas(width=canvas_width, height=canvas_height, bg='grey')
 background_start.pack(expand=YES, fill=BOTH)
+
+
+def chooseColorPlayer1():
+    global colorOfPlayer1
+    colorOfPlayer1 = colorchooser.askcolor(title="Choose color", initialcolor=colorOfPlayer1)[1]
+    background_start.itemconfig(oval1, fill=colorOfPlayer1)
+
+
+def chooseColorPlayer2():
+    global colorOfPlayer2
+    colorOfPlayer2 = colorchooser.askcolor(title="Choose color", initialcolor=colorOfPlayer2)[1]
+    background_start.itemconfig(oval2, fill=colorOfPlayer2)
+
+
 oval1 = createPlayerChip(background_start, 850, 310, 60, "yellow")
 oval2 = createPlayerChip(background_start, 850, 410, 60, "red")
+
+background_start.tag_bind(oval1, '<Button-1>', lambda a: chooseColorPlayer1())
+background_start.tag_bind(oval2, '<Button-1>', lambda a: chooseColorPlayer2())
+
 background_start.create_text(960, 200, text="VierGewinnt", fill="black", font=("Purisa", 100))
 
 # Button und Textfeld code(Startbildschirm)
@@ -141,16 +185,15 @@ tf_player2.place(x=950, y=430)
 tf_player2.insert(0, 'Spieler 2')
 
 
-def getPlayer1():
-    return Player("yellow", tf_player1.get())
-
-
-def getPlayer2():
-    return Player("red", tf_player2.get())
-
-
 def startGame():
-    if getPlayer1().name != "" and getPlayer2().name != "":
+    global player1
+    global player2
+    if player1.name != "" and player2.name != "":
+        player1.setName(tf_player1.get())
+        player2.setName(tf_player2.get())
+        player1.setPlayerColor(colorOfPlayer1)
+        player2.setPlayerColor(colorOfPlayer2)
+
         background_start.delete(oval1)
         background_start.delete(oval2)
         background_start.destroy()
@@ -193,11 +236,6 @@ def nextRound():
     roundNumber = roundNumber + 1
     print('Round Number:', roundNumber)
     playerListBar.tauscheSpielerAnDerReihe()
-    randomX = random.randint(0, len(spielfeld))
-    feld = getFeld(randomX, random.randint(0, len(getFelderReihe(randomX))))
-
-    if feld is not None:
-        feld.placeChip('red', 1)
 
 
 def setupSpielFeld(background):
@@ -229,12 +267,13 @@ def createControlButton(row):
 def handlePlayerChip(row):
     feld = getPositonForChip(row)
     if feld is not None:
-        feld.placeChip('red', spielerAnDerReihe)
+        feld.placeChip(spielerAnDerReiheObject.playerColor, spielerAnDerReihe)
+    nextRound()
 
 
 def getPositonForChip(row):
     felderReihe = getFelderReihe(row - 1)
-    for i, feld in enumerate(felderReihe):
+    for feld in reversed(felderReihe):
         if feld.isEmpty():
             return feld
 
@@ -255,11 +294,6 @@ def getFeld(horizontal, vertical):
 
 # bei game restart
 def restartGame(background):
-    global var1
-    global var2
-    global var3
-    global var4
-
     # Button und Textfeld code(Startbildschirm)
 
     but1 = Button(gui, width=20, height=6, bg='grey')
@@ -277,11 +311,6 @@ def restartGame(background):
     butrestart["text"] = "Restart"
     butrestart["command"] = lambda: restartGame(background)
     butrestart.place(x=820, y=500)
-
-    background.delete(var1)
-    background.delete(var2)
-    background.delete(var3)
-    background.delete(var4)
 
 
 gui.mainloop()

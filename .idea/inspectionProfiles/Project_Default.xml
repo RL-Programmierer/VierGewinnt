@@ -17,6 +17,7 @@
         <list>
           <option value="int.itemconfig" />
           <option value="int.tauscheSpielerAnDerReihe" />
+          <option value="int.playerColor" />
         </list>
       </option>
     </inspection_tool>
