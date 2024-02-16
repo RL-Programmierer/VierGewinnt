@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Spieler Chips">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Farbennnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -382,7 +381,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707944849451</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Farbennnn">
+      <option name="closed" value="true" />
+      <created>1708031649328</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1708031649328</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -397,7 +404,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Commit" />
     <MESSAGE value="Commit2" />
     <MESSAGE value="Commit1" />
     <MESSAGE value="Guttt" />
@@ -422,6 +428,7 @@
     <MESSAGE value="Muss nicht mehr da sein" />
     <MESSAGE value="Quick Fix" />
     <MESSAGE value="Spieler Chips" />
-    <option name="LAST_COMMIT_MESSAGE" value="Spieler Chips" />
+    <MESSAGE value="Farbennnn" />
+    <option name="LAST_COMMIT_MESSAGE" value="Farbennnn" />
   </component>
 </project>
