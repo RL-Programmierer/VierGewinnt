@@ -5,7 +5,7 @@ gui = Tk()
 width, height = gui.winfo_screenwidth(), gui.winfo_screenheight()
 gui.geometry("%dx%d+0+0" % (width, height))
 gui.state('zoomed')
-gui.title('VierGewinnt')
+gui.title('Vier Gewinnt')
 
 print('max. Länge:', width)
 print('max. Höhe:', height)
@@ -172,7 +172,7 @@ chip2 = createPlayerChip(background, 800, 410, 80, colorOfPlayer2)
 background.tag_bind(chip1, '<Button-1>', lambda a: chooseColorPlayer1())
 background.tag_bind(chip2, '<Button-1>', lambda a: chooseColorPlayer2())
 
-vierGewinnt = background.create_text(960, 200, text="VierGewinnt", fill="black", font=("Purisa", 100))
+vierGewinnt = background.create_text(960, 200, text="Vier Gewinnt", fill="black", font=("Purisa", 100))
 # Button und Textfeld code(Startbildschirm)
 
 startButton = Button(gui, width=30, height=6, bg='grey')
@@ -302,7 +302,34 @@ def getFeld(horizontal, vertical):
 # bei game restart
 def restartGame():
     # Button und Textfeld code(Startbildschirm)
-    print('Restarted!')
+        # Button und Textfeld code(Startbildschirm)
+    but1 = Button(gui, width=20, height=6, bg='grey')
+    but1["text"] = "Start"
+    but1["command"] = lambda: startGame()
+    but1.place(x=920, y=540)
+
+    tf_player1 = Entry(gui, bg='grey')
+    tf_player1.place(x=175, y=70)
+
+    tf_player2 = Entry(gui, bg='grey')
+    tf_player2.place(x=175, y=170)
+
+    butrestart = Button(gui, width=50, height=10, bg='grey')
+    butrestart["text"] = "Restart"
+    butrestart["command"] = lambda: restartGame(background)
+    butrestart.place(x=820, y=500)
+
+    background.delete(playerListBar.Spieler1)
+    background.delete(playerListBar.Spieler2)
+    background.delete(playerListBar.Bindestrich)
+    background.delete(playerListBar.Rechteck)
+
+    for i, j in enumerate(spielfeld):
+        for i2, j2 in enumerate(j):
+            background.delete(j2.feld)
+
+    for i, button in enumerate(buttons):
+        button.destroy()
 
 
 def backToStartMenu():
@@ -343,5 +370,12 @@ def backToStartMenu():
     spielerAnDerReihe = player1
     spielfeld.clear()
 
+menu = Button(gui, width=15, height=5, bg='grey')
+menu["text"] = "Menü"
+menu["command"] = 'menü'
+menu.place(x=1780, y=25)
+
+def menü():
+   print('ne')
 
 gui.mainloop()
