@@ -261,6 +261,9 @@ def createControlButtons():
         createControlButton(y)
 
 
+buttons = []
+
+
 def createControlButton(row):
     button_x = 375 + size * row
     if row != 1:
@@ -269,6 +272,7 @@ def createControlButton(row):
     controlButton["text"] = "↓"
     controlButton["command"] = lambda: handlePlayerChip(row)
     controlButton.place(x=button_x, y=172)
+    buttons.append(controlButton)
 
 
 def handlePlayerChip(row):
@@ -302,7 +306,7 @@ def getFeld(horizontal, vertical):
 # bei game restart
 def restartGame():
     # Button und Textfeld code(Startbildschirm)
-        # Button und Textfeld code(Startbildschirm)
+    # Button und Textfeld code(Startbildschirm)
     but1 = Button(gui, width=20, height=6, bg='grey')
     but1["text"] = "Start"
     but1["command"] = lambda: startGame()
@@ -319,6 +323,9 @@ def restartGame():
     butrestart["command"] = lambda: restartGame(background)
     butrestart.place(x=820, y=500)
 
+    deleteInGameItems()
+
+def deleteInGameItems():
     background.delete(playerListBar.Spieler1)
     background.delete(playerListBar.Spieler2)
     background.delete(playerListBar.Bindestrich)
@@ -327,6 +334,7 @@ def restartGame():
     for i, j in enumerate(spielfeld):
         for i2, j2 in enumerate(j):
             background.delete(j2.feld)
+            background.delete(j2.playerChip)
 
     for i, button in enumerate(buttons):
         button.destroy()
@@ -344,8 +352,10 @@ def backToStartMenu():
     global player1
     global player2
 
-    chip1 = createPlayerChip(background, 850, 310, 80, player1.getPlayerColor())
-    chip2 = createPlayerChip(background, 850, 410, 80, player2.getPlayerColor())
+    chip1 = createPlayerChip(background, 800, 310, 80, colorOfPlayer1)
+    chip2 = createPlayerChip(background, 800, 410, 80, colorOfPlayer2)
+
+    deleteInGameItems()
 
     background.tag_bind(chip1, '<Button-1>', lambda a: chooseColorPlayer1())
     background.tag_bind(chip2, '<Button-1>', lambda a: chooseColorPlayer2())
@@ -359,23 +369,26 @@ def backToStartMenu():
     startButton["command"] = lambda: startGame()
     startButton.place(x=890, y=540)
 
-    tf_player1 = Entry(gui, bg='grey', width=30)
-    tf_player1.place(x=950, y=330)
+    tf_player1 = Entry(gui, bg='grey', width=25, font=("Purisa", 14))
+    tf_player1.place(x=900, y=340)
     tf_player1.insert(0, 'Spieler 1')
 
-    tf_player2 = Entry(gui, bg='grey', width=30)
-    tf_player2.place(x=950, y=430)
+    tf_player2 = Entry(gui, bg='grey', width=25, font=("Purisa", 14))
+    tf_player2.place(x=900, y=440)
     tf_player2.insert(0, 'Spieler 2')
 
     spielerAnDerReihe = player1
     spielfeld.clear()
+
 
 menu = Button(gui, width=15, height=5, bg='grey')
 menu["text"] = "Menü"
 menu["command"] = 'menü'
 menu.place(x=1780, y=25)
 
+
 def menü():
-   print('ne')
+    print('ne')
+
 
 gui.mainloop()
