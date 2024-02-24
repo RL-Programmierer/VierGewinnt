@@ -222,6 +222,7 @@ def startGame():
         buttemporaer3["command"] = lambda: backToStartMenu()
         buttemporaer3.place(x=520, y=740)
 
+
     else:
         print("Keine Namen sind gesetzt")
 
@@ -302,6 +303,17 @@ def getFeld(horizontal, vertical):
                 if i2 == vertical:
                     return j2
 
+
+
+
+
+def checkcheck():
+    for i, obj in enumerate(spielfeld):
+        for i2, obj2 in enumerate(j):
+            if obj2.getPlayerNumber != 0:
+                print('')
+                    
+    
 
 # bei game restart
 def restartGame():
@@ -392,3 +404,5 @@ def menü():
 
 
 gui.mainloop()
+
+
