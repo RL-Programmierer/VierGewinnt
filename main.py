@@ -309,7 +309,7 @@ def getFeld(horizontal, vertical):
 
 def checkcheck():
     for i, obj in enumerate(spielfeld):
-        for i2, obj2 in enumerate(j):
+        for i2, obj2 in enumerate(i):
             if obj2.getPlayerNumber != 0:
                 print('')
                     
