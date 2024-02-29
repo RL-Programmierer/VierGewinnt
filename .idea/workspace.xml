@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Farbennnn">
+    <list default="true" id="ab2c1062-d942-458e-b805-1949f1e745a2" name="Changes" comment="Mehr Kommentare">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_09_02_2024_17_27_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_09_02_2024_17_27__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +24,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -389,7 +392,31 @@
       <option name="project" value="LOCAL" />
       <updated>1708031649328</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Rework">
+      <option name="closed" value="true" />
+      <created>1708104627136</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1708104627136</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Quick Fix">
+      <option name="closed" value="true" />
+      <created>1708863904433</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1708863904433</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Mehr Kommentare">
+      <option name="closed" value="true" />
+      <created>1709238121569</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1709238121569</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -404,8 +431,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Commit2" />
-    <MESSAGE value="Commit1" />
     <MESSAGE value="Guttt" />
     <MESSAGE value="Soon...." />
     <MESSAGE value="Player Class" />
@@ -426,9 +451,11 @@
     <MESSAGE value="Wichtig" />
     <MESSAGE value="Kleines Easter Egg" />
     <MESSAGE value="Muss nicht mehr da sein" />
-    <MESSAGE value="Quick Fix" />
     <MESSAGE value="Spieler Chips" />
     <MESSAGE value="Farbennnn" />
-    <option name="LAST_COMMIT_MESSAGE" value="Farbennnn" />
+    <MESSAGE value="Rework" />
+    <MESSAGE value="Quick Fix" />
+    <MESSAGE value="Mehr Kommentare" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mehr Kommentare" />
   </component>
 </project>
