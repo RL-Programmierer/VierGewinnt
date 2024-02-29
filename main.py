@@ -18,7 +18,6 @@ class PlayerListBar:
     def __init__(self):
         global background
         global spielerAnDerReihe
-        self.background = background
         self.Rechteck = background.create_rectangle(0, 0, 1920, 60, fill="#585B5F")
         self.Bindestrich = background.create_text(960, 30, text='-', fill='#000000', font=('Purisa', 22))
 
@@ -37,6 +36,7 @@ class PlayerListBar:
 
     # tauscht den Spieler, der an der Reihe ist
     def tauscheSpielerAnDerReihe(self):
+        global background
         global spielerAnDerReihe
 
         if spielerAnDerReihe.getPlayerNumber() == 1:
@@ -47,11 +47,11 @@ class PlayerListBar:
             print('Error!!! SpielerAnDerReihe:', spielerAnDerReihe)
 
         if spielerAnDerReihe.getPlayerNumber() == 1:
-            self.background.itemconfig(self.Spieler1, fill='#000000', font=('Purisa', 18, 'bold'))
-            self.background.itemconfig(self.Spieler2, fill='#847B79', font=('Purisa', 18))
+            background.itemconfig(self.Spieler1, fill='#000000', font=('Purisa', 18, 'bold'))
+            background.itemconfig(self.Spieler2, fill='#847B79', font=('Purisa', 18))
         elif spielerAnDerReihe.getPlayerNumber() == 2:
-            self.background.itemconfig(self.Spieler1, fill='#847B79', font=('Purisa', 18))
-            self.background.itemconfig(self.Spieler2, fill='#000000', font=('Purisa', 18, 'bold'))
+            background.itemconfig(self.Spieler1, fill='#847B79', font=('Purisa', 18))
+            background.itemconfig(self.Spieler2, fill='#000000', font=('Purisa', 18, 'bold'))
 
 
 # Repräsentiert ein Feld → ein Viereck des Spielfelds
@@ -252,7 +252,8 @@ def startGame():
         menu = Button(gui, width=15, height=5, bg='grey')
         menu["text"] = "Menü"
         menu["command"] = lambda: createMenuButtons()
-        menu.place(x=1780, y=25)
+        menu.place(x=1780, y=65)
+
         checkRestart()
 
     else:
@@ -314,7 +315,7 @@ def createControlButtons():
         createControlButton(y)
 
 
-# Control Button Liste, um die Buttons spätr zu löschen
+# Control Button Liste, um die Buttons später zu löschen
 buttons = []
 
 
@@ -427,10 +428,10 @@ def backToStartMenu():
 
 # erstellt, das Menü
 def createMenuButtons():
-    buttemporaer3 = Button(gui, width=20, height=6, bg='grey')
-    buttemporaer3["text"] = "Back To Start Menu"
-    buttemporaer3["command"] = lambda: backToStartMenu()
-    buttemporaer3.place(x=520, y=740)
+    backToSMButton = Button(gui, width=20, height=6, bg='grey')
+    backToSMButton["text"] = "Back To Start Menu"
+    backToSMButton["command"] = lambda: backToStartMenu()
+    backToSMButton.place(x=520, y=740)
 
 
 gui.mainloop()
