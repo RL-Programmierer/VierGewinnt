@@ -79,6 +79,8 @@ class VierGewinntFeld:
         self.feld = background.create_rectangle(feld_x, feld_y, feld_x + size,
                                                 feld_y + size, fill=self.farbe)
 
+        self.placeChip("black", 0)
+
     def setColor(self, color):
         self.farbe = color
         self.background.itemconfig(self.feld, fill=color)
@@ -96,6 +98,8 @@ class VierGewinntFeld:
         return self.playerNumber == 0
 
     def placeChip(self, color, playerNumber):
+        if self.playerChip is not None:
+            background.delete(self.playerChip)
         self.playerNumber = playerNumber
         feld_y = 100 + size * self.feldX
         feld_x = 375 + size * self.feldY
@@ -142,6 +146,7 @@ player1 = Player(colorOfPlayer1, playerName1, 1)
 player2 = Player(colorOfPlayer2, playerName2, 2)
 
 spielerAnDerReihe = player1
+restarted = False
 
 
 # create
@@ -212,16 +217,11 @@ def startGame():
 
         createControlButtons()
 
-        buttemporaer2 = Button(gui, width=20, height=6, bg='grey')
-        buttemporaer2["text"] = "RestartTest"
-        buttemporaer2["command"] = lambda: restartGame()
-        buttemporaer2.place(x=1020, y=740)
-
-        buttemporaer3 = Button(gui, width=20, height=6, bg='grey')
-        buttemporaer3["text"] = "Back To Start Menu"
-        buttemporaer3["command"] = lambda: backToStartMenu()
-        buttemporaer3.place(x=520, y=740)
-
+        menu = Button(gui, width=15, height=5, bg='grey')
+        menu["text"] = "Menü"
+        menu["command"] = lambda: createMenuButtons()
+        menu.place(x=1780, y=25)
+        checkRestart()
 
     else:
         print("Keine Namen sind gesetzt")
@@ -230,6 +230,17 @@ def startGame():
 spielfeld = []
 playerListBar = 0
 
+
+def checkRestart():
+    global restarted
+    if restarted:
+        background.delete(chip1)
+        background.delete(chip2)
+        background.delete(vierGewinnt)
+        startButton.destroy()
+        tf_player1.destroy()
+        tf_player2.destroy()
+        restarted = False
 
 def setupPlayerListBar():
     global background
@@ -303,45 +314,12 @@ def getFeld(horizontal, vertical):
                 if i2 == vertical:
                     return j2
 
-
-
-
-
-def checkcheck():
-    for i, obj in enumerate(spielfeld):
-        for i2, obj2 in enumerate(i):
-            if obj2.getPlayerNumber != 0:
-                print('')
-                    
-    
-
-# bei game restart
-def restartGame():
-    # Button und Textfeld code(Startbildschirm)
-    # Button und Textfeld code(Startbildschirm)
-    but1 = Button(gui, width=20, height=6, bg='grey')
-    but1["text"] = "Start"
-    but1["command"] = lambda: startGame()
-    but1.place(x=920, y=540)
-
-    tf_player1 = Entry(gui, bg='grey')
-    tf_player1.place(x=175, y=70)
-
-    tf_player2 = Entry(gui, bg='grey')
-    tf_player2.place(x=175, y=170)
-
-    butrestart = Button(gui, width=50, height=10, bg='grey')
-    butrestart["text"] = "Restart"
-    butrestart["command"] = lambda: restartGame(background)
-    butrestart.place(x=820, y=500)
-
-    deleteInGameItems()
-
 def deleteInGameItems():
     background.delete(playerListBar.Spieler1)
     background.delete(playerListBar.Spieler2)
     background.delete(playerListBar.Bindestrich)
     background.delete(playerListBar.Rechteck)
+    background.delete(vierGewinnt)
 
     for i, j in enumerate(spielfeld):
         for i2, j2 in enumerate(j):
@@ -363,6 +341,7 @@ def backToStartMenu():
     global vierGewinnt
     global player1
     global player2
+    global restarted
 
     chip1 = createPlayerChip(background, 800, 310, 80, colorOfPlayer1)
     chip2 = createPlayerChip(background, 800, 410, 80, colorOfPlayer2)
@@ -391,18 +370,14 @@ def backToStartMenu():
 
     spielerAnDerReihe = player1
     spielfeld.clear()
+    restarted = True
 
 
-menu = Button(gui, width=15, height=5, bg='grey')
-menu["text"] = "Menü"
-menu["command"] = 'menü'
-menu.place(x=1780, y=25)
-
-
-def menü():
-    print('ne')
+def createMenuButtons():
+    buttemporaer3 = Button(gui, width=20, height=6, bg='grey')
+    buttemporaer3["text"] = "Back To Start Menu"
+    buttemporaer3["command"] = lambda: backToStartMenu()
+    buttemporaer3.place(x=520, y=740)
 
 
 gui.mainloop()
-
-
