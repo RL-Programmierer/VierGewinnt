@@ -10,23 +10,13 @@ gui.title('Vier Gewinnt')
 print('max. Länge:', width)
 print('max. Höhe:', height)
 
-# Feld Größe Einstellung
-size = 130
-
-# Spielfeldgröße
-horizontalFeldNumber = 7
-verticalFeldNumber = 8
-
-# default Spieler Name
-playerName1 = 'Spieler 1'
-playerName2 = 'Spieler 2'
-
 
 # Repräsentiert die Spieler Leiste
 class PlayerListBar:
 
     # erstellt die obere Leiste mit Spielernamen
-    def __init__(self, background):
+    def __init__(self):
+        global background
         global spielerAnDerReihe
         self.background = background
         self.Rechteck = background.create_rectangle(0, 0, 1920, 60, fill="#585B5F")
@@ -64,29 +54,31 @@ class PlayerListBar:
             self.background.itemconfig(self.Spieler2, fill='#000000', font=('Purisa', 18, 'bold'))
 
 
-# Repräsentiert ein Feld -> ein Viereck des Spielfelds
+# Repräsentiert ein Feld → ein Viereck des Spielfelds
 class VierGewinntFeld:
 
     # Erstellen des Vierecks
-    def __init__(self, background, feldX, feldY):
+    def __init__(self, feldX, feldY):
+        global background
+        global defaultSpielfeldFarbe
+        # erstellen eines leeren Feldes
         self.playerChip = None
         self.playerNumber = 0
         self.feldX = feldX
         self.feldY = feldY
-        self.background = background
-        self.farbe = 'blue'
+        self.farbe = defaultSpielfeldFarbe
 
         feld_y = 100 + size * self.feldX
         feld_x = 375 + size * self.feldY
 
         self.feld = background.create_rectangle(feld_x, feld_y, feld_x + size,
                                                 feld_y + size, fill=self.farbe)
-
-        self.placeChip("black", 0)
+        self.placeChip('black', 0)
 
     def setColor(self, color):
+        global background
         self.farbe = color
-        self.background.itemconfig(self.feld, fill=color)
+        background.itemconfig(self.feld, fill=color)
 
     def getColor(self):
         return self.farbe
@@ -97,24 +89,26 @@ class VierGewinntFeld:
     def getPlayerNumber(self):
         return self.playerNumber
 
-    # Überprüfung, ob das Viereck von einem Spieler besetzt ist
+    # Überprüfung, ob das Viereck von einem Spieler besetzt ist oder nicht
     def isEmpty(self):
         return self.playerNumber == 0
 
     # setzt den Spieler Chip und ersetzt den Spieler 0 → Spieler 0 = leeres Feld
     def placeChip(self, color, playerNumber):
-        if self.playerNumber != 0 and self.playerChip is not None:
+        global background
+        if self.isEmpty():
             background.delete(self.playerChip)
         self.playerNumber = playerNumber
         feld_y = 100 + size * self.feldX
         feld_x = 375 + size * self.feldY
         offset = 20
-        self.playerChip = createPlayerChip(self.background, feld_x + offset, feld_y + offset, size - offset * 2, color)
+        self.playerChip = createPlayerChip(background, feld_x + offset, feld_y + offset, size - offset * 2, color)
 
     # löscht Spieler Chip, wenn es nicht ein leeres Feld
     def deleteChip(self):
-        if self.playerChip is not None and not self.isEmpty():
-            self.background.delete(self.playerChip)
+        global background
+        if self.playerChip is not None:
+            background.delete(self.playerChip)
 
 
 # Repräsentiert einen Spieler
@@ -141,6 +135,19 @@ class Player:
     def getPlayerNumber(self):
         return self.playerNumber
 
+
+# Feld Größe Einstellung
+size = 130
+
+defaultSpielfeldFarbe = 'blue'
+
+# Spielfeldgröße
+horizontalFeldNumber = 7
+verticalFeldNumber = 8
+
+# default Spieler Name
+playerName1 = 'Spieler 1'
+playerName2 = 'Spieler 2'
 
 # Kreise im Startgame Bildschirm
 canvas_width = 200
@@ -276,7 +283,7 @@ def checkRestart():
 def setupPlayerListBar():
     global background
     global playerListBar
-    playerListBar = PlayerListBar(background)
+    playerListBar = PlayerListBar()
 
 
 # startet eine neue Runde
@@ -296,7 +303,7 @@ def setupSpielFeld():
         # y Koordinate Berechnung
         horizontalLineList = []
         for h in range(1, horizontalFeldNumber):
-            feld = VierGewinntFeld(background, h, v)
+            feld = VierGewinntFeld(h, v)
             horizontalLineList.append(feld)
         spielfeld.append(horizontalLineList)
 
@@ -366,10 +373,13 @@ def deleteInGameItems():
     for indexVertikal, listeVertikal in enumerate(spielfeld):
         for indexHorizontal, viereck in enumerate(listeVertikal):
             background.delete(viereck.feld)
-            background.delete(viereck.playerChip)
+            viereck.deleteChip()
 
     for i, button in enumerate(buttons):
         button.destroy()
+
+    spielfeld.clear()
+    buttons.clear()
 
 
 # geht zum Startmenü zurück
@@ -412,7 +422,6 @@ def backToStartMenu():
     tf_player2.insert(0, 'Spieler 2')
 
     spielerAnDerReihe = player1
-    spielfeld.clear()
     restarted = True
 
 
