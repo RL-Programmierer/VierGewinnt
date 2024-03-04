@@ -651,4 +651,11 @@ def restartGame():
                 viereck.placeChip('black', 0)
 
 
+def checkcheck():
+    for i, obj in enumerate(spielfeld):
+        for i2, obj2 in enumerate(obj):
+            if obj2.getPlayerNumber != 0:
+                print('')
+
+
 gui.mainloop()
