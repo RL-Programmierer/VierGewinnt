@@ -11,6 +11,70 @@ print('max. Länge:', width)
 print('max. Höhe:', height)
 
 
+# Repräsentiert das Settings Menu im Hauptmenü
+class Settings:
+    def __init__(self):
+        self.settingsButton = None
+        self.controlButtons = False
+        # Liste aller interaktiven Schaltfläschen, die Beteiligt sind
+        self.options = []
+
+    def createButton(self):
+        self.settingsButton = Button(gui, width=30, height=6, bg='grey')
+        self.settingsButton["text"] = "Einstellungen"
+        self.settingsButton["command"] = lambda: self.createOptions()
+        self.settingsButton.place(x=890, y=700)
+
+    def deleteMenuButton(self):
+        if self.settingsButton is not None:
+            self.settingsButton: Button
+            self.settingsButton.destroy()
+            self.settingsButton = None
+
+    def createOptions(self):
+        # löschen des Menu Buttons
+        self.deleteMenuButton()
+
+        # löschen des Haupt Menus
+        deleteHauptMenu()
+
+        backButton = Button(gui, width=30, height=6, bg='grey')
+        backButton["text"] = "Zurück"
+        backButton["command"] = lambda: self.backToStartMenu()
+        backButton.place(x=890, y=700)
+        self.options.append(backButton)
+
+        controlOption = Button(gui, width=30, height=6, bg='grey')
+        controlOption["text"] = str(self.controlButtons)
+        controlOption["command"] = lambda: self.switchControlButtonState()
+        controlOption.place(x=890, y=550)
+        self.options.append(controlOption)
+
+    def deleteOptions(self):
+        for index, button in enumerate(self.options):
+            button: Button
+            button.destroy()
+
+        self.options.clear()
+
+    def backToStartMenu(self):
+        self.deleteMenuButton()
+        self.deleteOptions()
+        createStartMenu()
+
+    def switchControlButtonState(self):
+        if not self.controlButtons:
+            self.controlButtons = True
+            button = self.options[1]
+            button['text'] = str(self.controlButtons)
+            self.options[1] = button
+        else:
+            self.controlButtons = False
+            button = self.options[1]
+            button['text'] = str(self.controlButtons)
+            self.options[1] = button
+
+
 # Repräsentiert das in Game Menu
 class InGameMenu:
     def __init__(self):
@@ -158,6 +222,13 @@ class PlayerListBar:
                 background.itemconfig(self.Spieler1, fill='#847B79', font=('Purisa', 18))
                 background.itemconfig(self.Spieler2, fill='#000000', font=('Purisa', 18, 'bold'))
 
+    def deletePlayerListBar(self):
+        global background
+        background.delete(self.Spieler1)
+        background.delete(self.Spieler2)
+        background.delete(self.Rechteck)
+        background.delete(self.Bindestrich)
+
 
 # Repräsentiert ein Feld → ein Viereck des Spielfelds
 class VierGewinntFeld:
@@ -179,8 +250,9 @@ class VierGewinntFeld:
         self.feld = background.create_rectangle(feld_x, feld_y, feld_x + size,
                                                 feld_y + size, fill=self.farbe)
 
-        # gibt dem Feld die Funktion bei einem Linksklick, den Chip mit Physics hinzusetzten
-        background.tag_bind(self.feld, '<Button-1>', lambda a: handlePlayerChip(self.vertikal))
+        if not settingsMenu.controlButtons:
+            # gibt dem Feld die Funktion bei einem Linksklick, den Chip mit Physics hinzusetzten
+            background.tag_bind(self.feld, '<Button-1>', lambda a: handlePlayerChip(self.vertikal))
 
         self.placeChip('black', 0)
 
@@ -212,8 +284,10 @@ class VierGewinntFeld:
         feld_x = 375 + size * self.vertikal
         offset = 20
         self.playerChip = createPlayerChip(background, feld_x + offset, feld_y + offset, size - offset * 2, color)
-        # gibt dem Chip die Funktion bei einem Linksklick, den Chip mit Physics hinzusetzten
-        background.tag_bind(self.playerChip, '<Button-1>', lambda a: handlePlayerChip(self.vertikal))
+
+        if not settingsMenu.controlButtons:
+            # gibt dem Chip die Funktion bei einem Linksklick, den Chip mit Physics hinzusetzten
+            background.tag_bind(self.playerChip, '<Button-1>', lambda a: handlePlayerChip(self.vertikal))
 
     # löscht Spieler Chip, wenn es nicht ein leeres Feld
     def deleteChip(self):
@@ -320,6 +394,10 @@ tf_player2 = Entry(gui, bg='grey', width=25, font=("Purisa", 14))
 tf_player2.place(x=900, y=440)
 tf_player2.insert(0, 'Spieler 2')
 
+# Settings Menu im Hauptmenü
+settingsMenu = Settings()
+settingsMenu.createButton()
+
 # erstellen der InGameMenu Klasse
 menu = InGameMenu()
 
@@ -344,6 +422,24 @@ def chooseColorPlayer2():
     background.itemconfig(chip2, fill=colorOfPlayer2)
 
 
+def deleteHauptMenu():
+    global player1
+    global player2
+    global background
+    global vierGewinnt
+    global menu
+
+    background.delete(chip1)
+    background.delete(chip2)
+    background.delete(vierGewinnt)
+    startButton.destroy()
+    settingsMenu.deleteMenuButton()
+    tf_player1.destroy()
+    tf_player2.destroy()
+    settingsMenu.deleteMenuButton()
+    settingsMenu.deleteOptions()
+
+
 # Funktion fürs Starten vom Vier Gewinnt Spiel
 def startGame():
     global player1
@@ -357,22 +453,15 @@ def startGame():
         player1.setPlayerColor(colorOfPlayer1)
         player2.setPlayerColor(colorOfPlayer2)
 
-        background.delete(chip1)
-        background.delete(chip2)
-        background.delete(vierGewinnt)
-        startButton.destroy()
-        setupSpielFeld()
-
         # erstellt die Spieler Leiste und setzt die Variable
         global playerListBar
         playerListBar.createPlayerListBar()
 
-        tf_player1.destroy()
-        tf_player2.destroy()
-
+        setupSpielFeld()
         createControlButtons()
-
         menu.createMenuButton()
+
+        deleteHauptMenu()
 
         checkRestart()
 
@@ -384,6 +473,7 @@ def startGame():
 def checkRestart():
     global restarted
     global menu
+    global settingsMenu
     if restarted:
         background.delete(chip1)
         background.delete(chip2)
@@ -391,6 +481,7 @@ def checkRestart():
         startButton.destroy()
         tf_player1.destroy()
         tf_player2.destroy()
+        settingsMenu.deleteMenuButton()
         restarted = False
 
 
@@ -418,8 +509,9 @@ def setupSpielFeld():
 
 # erstellt die Buttons, die in der Reihe einen neuen Chip hineinsetzten können
 def createControlButtons():
-    for y in range(1, verticalFeldNumber):
-        createControlButton(y)
+    if settingsMenu.controlButtons:
+        for y in range(1, verticalFeldNumber):
+            createControlButton(y)
 
 
 # Control Button Liste, um die Buttons später zu löschen
@@ -472,11 +564,12 @@ def getFeld(horizontaleNummer, vertikaleNummer):
 
 # löscht alle Elemente, die im Spielmenü da sind
 def deleteInGameItems():
-    background.delete(playerListBar.Spieler1)
-    background.delete(playerListBar.Spieler2)
-    background.delete(playerListBar.Bindestrich)
-    background.delete(playerListBar.Rechteck)
-    background.delete(vierGewinnt)
+    global menu
+    global background
+    global spielfeld
+    global buttons
+    global playerListBar
+    playerListBar.deletePlayerListBar()
 
     for indexVertikal, listeVertikal in enumerate(spielfeld):
         for indexHorizontal, viereck in enumerate(listeVertikal):
@@ -488,13 +581,12 @@ def deleteInGameItems():
 
     spielfeld.clear()
     buttons.clear()
+    menu.deleteAllButtons()
 
 
-# geht zum Startmenü zurück
-def backToStartMenu():
+def createStartMenu():
     global tf_player1
     global tf_player2
-    global spielerAnDerReihe
     global chip1
     global chip2
     global startButton
@@ -502,20 +594,14 @@ def backToStartMenu():
     global vierGewinnt
     global player1
     global player2
-    global restarted
-    global roundNumber
-
-    menu.deleteAllButtons()
 
     chip1 = createPlayerChip(background, 800, 310, 80, colorOfPlayer1)
     chip2 = createPlayerChip(background, 800, 410, 80, colorOfPlayer2)
 
-    deleteInGameItems()
-
     background.tag_bind(chip1, '<Button-1>', lambda a: chooseColorPlayer1())
     background.tag_bind(chip2, '<Button-1>', lambda a: chooseColorPlayer2())
 
-    vierGewinnt = background.create_text(960, 200, text="VierGewinnt", fill="black", font=("Purisa", 100))
+    vierGewinnt = background.create_text(960, 200, text="Vier Gewinnt", fill="black", font=("Purisa", 100))
 
     # Button und Textfeld code(Startbildschirm)
 
@@ -531,6 +617,18 @@ def backToStartMenu():
     tf_player2 = Entry(gui, bg='grey', width=25, font=("Purisa", 14))
     tf_player2.place(x=900, y=440)
     tf_player2.insert(0, 'Spieler 2')
+
+    settingsMenu.createButton()
+
+
+# geht zum Startmenü zurück
+def backToStartMenu():
+    global spielerAnDerReihe
+    global restarted
+    global roundNumber
+
+    createStartMenu()
+    deleteInGameItems()
 
     spielerAnDerReihe = player1
     restarted = True
