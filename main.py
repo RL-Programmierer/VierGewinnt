@@ -23,7 +23,7 @@ class Settings:
         self.settingsButton = Button(gui, width=30, height=6, bg='grey')
         self.settingsButton["text"] = "Einstellungen"
         self.settingsButton["command"] = lambda: self.createOptions()
-        self.settingsButton.place(x=890, y=700)
+        self.settingsButton.place(x=890, y=650)
 
     def deleteMenuButton(self):
         if self.settingsButton is not None:
@@ -41,13 +41,13 @@ class Settings:
         backButton = Button(gui, width=30, height=6, bg='grey')
         backButton["text"] = "Zurück"
         backButton["command"] = lambda: self.backToStartMenu()
-        backButton.place(x=890, y=700)
+        backButton.place(x=890, y=650)
         self.options.append(backButton)
 
         controlOption = Button(gui, width=30, height=6, bg='grey')
         controlOption["text"] = str(self.controlButtons)
         controlOption["command"] = lambda: self.switchControlButtonState()
-        controlOption.place(x=890, y=550)
+        controlOption.place(x=890, y=540)
         self.options.append(controlOption)
 
     def deleteOptions(self):
@@ -584,6 +584,7 @@ def deleteInGameItems():
     menu.deleteAllButtons()
 
 
+# erstellt nur das Start Menu
 def createStartMenu():
     global tf_player1
     global tf_player2
