@@ -171,13 +171,13 @@ class PlayerListBar:
         self.Bindestrich = background.create_text(960, 30, text='-', fill='#000000', font=('Purisa', 22))
 
         if spielerAnDerReihe.getPlayerNumber() == 1:
-            self.Spieler1 = background.create_text(820, 30, text=player1.name, fill='#000000',
+            self.Spieler1 = background.create_text(820, 30, text=player1.name, fill=player1.getPlayerColor(),
                                                    font=('Purisa', 18, 'bold'))
         else:
             self.Spieler1 = background.create_text(820, 30, text=player1.name, fill='#847B79', font=('Purisa', 18))
 
         if spielerAnDerReihe.getPlayerNumber() == 2:
-            self.Spieler2 = background.create_text(1100, 30, text=player2.name, fill='#000000',
+            self.Spieler2 = background.create_text(1100, 30, text=player2.name, fill=player2.getPlayerColor(),
                                                    font=('Purisa', 18, 'bold'))
         else:
             self.Spieler2 = background.create_text(1100, 30, text=player2.name, fill='#847B79',
@@ -196,11 +196,11 @@ class PlayerListBar:
             print('Error!!! SpielerAnDerReihe:', spielerAnDerReihe)
 
         if spielerAnDerReihe.getPlayerNumber() == 1:
-            background.itemconfig(self.Spieler1, fill='#000000', font=('Purisa', 18, 'bold'))
+            background.itemconfig(self.Spieler1, fill=player1.getPlayerColor(), font=('Purisa', 18, 'bold'))
             background.itemconfig(self.Spieler2, fill='#847B79', font=('Purisa', 18))
         elif spielerAnDerReihe.getPlayerNumber() == 2:
             background.itemconfig(self.Spieler1, fill='#847B79', font=('Purisa', 18))
-            background.itemconfig(self.Spieler2, fill='#000000', font=('Purisa', 18, 'bold'))
+            background.itemconfig(self.Spieler2, fill=player2.getPlayerColor(), font=('Purisa', 18, 'bold'))
 
     def setSpielerAnDerReihe(self, playerNumber):
         global background
@@ -216,11 +216,11 @@ class PlayerListBar:
                 print('Error!!! SpielerAnDerReihe:', spielerAnDerReihe)
 
             if playerNumber == 1:
-                background.itemconfig(self.Spieler1, fill='#000000', font=('Purisa', 18, 'bold'))
+                background.itemconfig(self.Spieler1, fill=player1.getPlayerColor(), font=('Purisa', 18, 'bold'))
                 background.itemconfig(self.Spieler2, fill='#847B79', font=('Purisa', 18))
             elif playerNumber == 2:
                 background.itemconfig(self.Spieler1, fill='#847B79', font=('Purisa', 18))
-                background.itemconfig(self.Spieler2, fill='#000000', font=('Purisa', 18, 'bold'))
+                background.itemconfig(self.Spieler2, fill=player2.getPlayerColor(), font=('Purisa', 18, 'bold'))
 
     def deletePlayerListBar(self):
         global background
