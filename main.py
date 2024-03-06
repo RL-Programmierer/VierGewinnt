@@ -254,7 +254,7 @@ class VierGewinntFeld:
             # gibt dem Feld die Funktion bei einem Linksklick, den Chip mit Physics hinzusetzten
             background.tag_bind(self.feld, '<Button-1>', lambda a: handlePlayerChip(self.vertikal))
 
-        self.placeChip('black', 0)
+        self.placeChip('grey', 0)
 
     def setColor(self, color):
         global background
@@ -648,7 +648,7 @@ def restartGame():
             viereck: VierGewinntFeld
             if not viereck.isEmpty():
                 viereck.deleteChip()
-                viereck.placeChip('black', 0)
+                viereck.placeChip('grey', 0)
 
 
 def checkcheck():
