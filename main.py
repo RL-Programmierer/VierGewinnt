@@ -33,6 +33,7 @@ class Settings:
             self.settingsButton.destroy()
             self.settingsButton = None
 
+    # erstellt die Buttons für das Einstellungs Menu
     def createOptions(self):
         # löschen des Menu Buttons
         self.deleteMenuButton()
@@ -52,6 +53,7 @@ class Settings:
         controlOption.place(x=890, y=540)
         self.options.append(controlOption)
 
+    # löscht die Buttons vom Einstellungs Menu
     def deleteOptions(self):
         for index, button in enumerate(self.options):
             button: Button
@@ -59,11 +61,13 @@ class Settings:
 
         self.options.clear()
 
+    # geht wieder zurück zum Startbildschirm
     def backToStartMenu(self):
         self.deleteMenuButton()
         self.deleteOptions()
         createStartMenu()
 
+    # ändert den Button Text zwischen True und False, wenn die Einstellung geändert wird
     def switchControlButtonState(self):
         if not self.controlButtons:
             self.controlButtons = True
