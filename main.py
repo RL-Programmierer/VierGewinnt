@@ -19,12 +19,14 @@ class Settings:
         # Liste aller interaktiven Schaltfläschen, die Beteiligt sind
         self.options = []
 
+    # Erstellt den Button, um auf das Menu zugreifen zu können
     def createButton(self):
         self.settingsButton = Button(gui, width=30, height=6, bg='grey')
         self.settingsButton["text"] = "Einstellungen"
         self.settingsButton["command"] = lambda: self.createOptions()
         self.settingsButton.place(x=890, y=650)
 
+    # löscht nur den Einstellungs Menu Button
     def deleteMenuButton(self):
         if self.settingsButton is not None:
             self.settingsButton: Button
