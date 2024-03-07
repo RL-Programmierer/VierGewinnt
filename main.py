@@ -453,6 +453,7 @@ def startGame():
     global background
     global vierGewinnt
     global menu
+    global playerListBar
     if player1.name != "" and player2.name != "":
         player1.setName(tf_player1.get())
         player2.setName(tf_player2.get())
@@ -460,7 +461,6 @@ def startGame():
         player2.setPlayerColor(colorOfPlayer2)
 
         # erstellt die Spieler Leiste und setzt die Variable
-        global playerListBar
         playerListBar.createPlayerListBar()
 
         setupSpielFeld()
@@ -661,7 +661,7 @@ def checkcheck():
     for i, obj in enumerate(spielfeld):
         for i2, obj2 in enumerate(obj):
             if obj2.getPlayerNumber != 0:
-                print('')
+                print()
 
 
 gui.mainloop()
