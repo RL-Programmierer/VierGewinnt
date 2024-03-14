@@ -280,6 +280,9 @@ class VierGewinntFeld:
     def isEmpty(self):
         return self.playerNumber == 0
 
+    def isNotEmpty(self):
+        return self.playerNumber == 1 or self.playerNumber == 2
+
     # setzt den Spieler Chip und ersetzt den Spieler 0 → Spieler 0 = leeres Feld
     def placeChip(self, color, playerNumber):
         global background
@@ -470,6 +473,8 @@ def startGame():
         deleteHauptMenu()
 
         checkRestart()
+        while (True):
+            checkcheck()
 
     else:
         print("Keine Namen sind gesetzt")
@@ -656,12 +661,23 @@ def restartGame():
                 viereck.deleteChip()
                 viereck.placeChip('grey', 0)
 
-
 def checkcheck():
-    for i, obj in enumerate(spielfeld):
-        for i2, obj2 in enumerate(obj):
-            if obj2.getPlayerNumber != 0:
-                print()
+    for indexVertikal, vertikaleListe in enumerate(spielfeld):
+        for indexHorizontal, viereck in enumerate(vertikaleListe):
+            isFull = False
 
+            
+            print(indexVertikal, ' ', indexHorizontal)
+            weiteresFeld1 = getFeld(indexVertikal + 1, indexHorizontal)
+            weiteresFeld2 = getFeld(indexVertikal + 2, indexHorizontal)
+            weiteresFeld3 = getFeld(indexVertikal + 3, indexHorizontal)
+            weiteresFeld4 = getFeld(indexVertikal + 4, indexHorizontal)
+            
+            if weiteresFeld1.getPlayerNumber() == weiteresFeld2.getPlayerNumber() and weiteresFeld1.getPlayerNumber() == weiteresFeld3.getPlayerNumber() and weiteresFeld1.getPlayerNumber() == weiteresFeld4.getPlayerNumber():
+                isFull = True
+                weiteresFeld1.setColor('green')
+                weiteresFeld2.setColor('green')
+                weiteresFeld3.setColor('green')
+                weiteresFeld4.setColor('green')
 
 gui.mainloop()
