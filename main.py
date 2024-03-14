@@ -456,6 +456,7 @@ def startGame():
     global background
     global vierGewinnt
     global menu
+    global playerListBar
     if player1.name != "" and player2.name != "":
         player1.setName(tf_player1.get())
         player2.setName(tf_player2.get())
@@ -463,7 +464,6 @@ def startGame():
         player2.setPlayerColor(colorOfPlayer2)
 
         # erstellt die Spieler Leiste und setzt die Variable
-        global playerListBar
         playerListBar.createPlayerListBar()
 
         setupSpielFeld()
@@ -661,12 +661,6 @@ def restartGame():
                 viereck.deleteChip()
                 viereck.placeChip('grey', 0)
 
-
-
-
-
-
-
 def checkcheck():
     for indexVertikal, vertikaleListe in enumerate(spielfeld):
         for indexHorizontal, viereck in enumerate(vertikaleListe):
@@ -685,18 +679,5 @@ def checkcheck():
                 weiteresFeld2.setColor('green')
                 weiteresFeld3.setColor('green')
                 weiteresFeld4.setColor('green')
-             
-
-
-
-
-
-
-
-
-
-
-
-
 
 gui.mainloop()
