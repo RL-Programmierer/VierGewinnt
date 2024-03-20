@@ -280,9 +280,6 @@ class VierGewinntFeld:
     def isEmpty(self):
         return self.playerNumber == 0
 
-    def isNotEmpty(self):
-        return self.playerNumber == 1 or self.playerNumber == 2
-
     # setzt den Spieler Chip und ersetzt den Spieler 0 → Spieler 0 = leeres Feld
     def placeChip(self, color, playerNumber):
         global background
@@ -456,7 +453,7 @@ def startGame():
     global background
     global vierGewinnt
     global menu
-    global playerListBar
+
     if player1.name != "" and player2.name != "":
         player1.setName(tf_player1.get())
         player2.setName(tf_player2.get())
@@ -464,6 +461,7 @@ def startGame():
         player2.setPlayerColor(colorOfPlayer2)
 
         # erstellt die Spieler Leiste und setzt die Variable
+        global playerListBar
         playerListBar.createPlayerListBar()
 
         setupSpielFeld()
@@ -473,8 +471,6 @@ def startGame():
         deleteHauptMenu()
 
         checkRestart()
-        while (True):
-            checkcheck()
 
     else:
         print("Keine Namen sind gesetzt")
@@ -500,9 +496,11 @@ def checkRestart():
 def nextRound():
     global roundNumber
     global playerListBar
+    global spielerAnDerReihe
     roundNumber = roundNumber + 1
     print('Round Number:', roundNumber)
     playerListBar.tauscheSpielerAnDerReihe()
+    winCheck()
 
 
 # alle Vierecke werden in einer Reihe zu einem Spielfeld zusammen gesetzt
@@ -661,23 +659,41 @@ def restartGame():
                 viereck.deleteChip()
                 viereck.placeChip('grey', 0)
 
-def checkcheck():
-    for indexVertikal, vertikaleListe in enumerate(spielfeld):
-        for indexHorizontal, viereck in enumerate(vertikaleListe):
-            isFull = False
 
-            
-            print(indexVertikal, ' ', indexHorizontal)
-            weiteresFeld1 = getFeld(indexVertikal + 1, indexHorizontal)
-            weiteresFeld2 = getFeld(indexVertikal + 2, indexHorizontal)
-            weiteresFeld3 = getFeld(indexVertikal + 3, indexHorizontal)
-            weiteresFeld4 = getFeld(indexVertikal + 4, indexHorizontal)
-            
-            if weiteresFeld1.getPlayerNumber() == weiteresFeld2.getPlayerNumber() and weiteresFeld1.getPlayerNumber() == weiteresFeld3.getPlayerNumber() and weiteresFeld1.getPlayerNumber() == weiteresFeld4.getPlayerNumber():
-                isFull = True
-                weiteresFeld1.setColor('green')
-                weiteresFeld2.setColor('green')
-                weiteresFeld3.setColor('green')
-                weiteresFeld4.setColor('green')
+def winCheck():
+    for playerNumber in range(1, 2):
+        print(playerNumber)
+        for y in range(6):
+            for x in range(1, 5):
+                if (spielfeld[y][x].getPlayerNumber() == playerNumber and
+                    spielfeld[y][x + 1].getPlayerNumber() == playerNumber and 
+                    spielfeld[y][x + 2].getPlayerNumber() == playerNumber and 
+                    spielfeld[y][x + 3].getPlayerNumber() == playerNumber):
+                    print('Der Spieler', playerNumber, 'hat gewonnen!')
+
+        for y in range(3):
+            for x in range(1, 8):
+                if (spielfeld[y][x].getPlayerNumber() == playerNumber and 
+                    spielfeld[y + 1][x].getPlayerNumber() == playerNumber and 
+                    spielfeld[y][x + 2].getPlayerNumber() == playerNumber and
+                    spielfeld[y][x + 3].getPlayerNumber() == playerNumber):
+                    print('Der Spieler', playerNumber, 'hat gewonnen!')
+
+        for y in range(3):
+            for x in range(1, 5):
+                if (spielfeld[y][x].getPlayerNumber() == playerNumber and 
+                    spielfeld[y + 1][x + 1].getPlayerNumber() == playerNumber and 
+                    spielfeld[y + 2][x + 2].getPlayerNumber() == playerNumber and 
+                    spielfeld[y + 3][x + 3].getPlayerNumber() == playerNumber):
+                    print('Der Spieler', playerNumber, 'hat gewonnen!')
+
+        for y in range(3, 6):
+            for x in range(1, 6):
+                if (spielfeld[y][x].getPlayerNumber() == playerNumber and 
+                    spielfeld[y - 1][x + 1].getPlayerNumber() == playerNumber and 
+                    spielfeld[y - 2][x + 2].getPlayerNumber() == playerNumber and 
+                    spielfeld[y - 3][x + 3].getPlayerNumber() == playerNumber):
+                    print('Der Spieler', playerNumber, 'hat gewonnen!')
+
 
 gui.mainloop()
