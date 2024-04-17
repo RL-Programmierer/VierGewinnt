@@ -281,7 +281,7 @@ class VierGewinntFeld:
         return self.playerNumber == 0
 
     # setzt den Spieler Chip und ersetzt den Spieler 0 → Spieler 0 = leeres Feld
-    def placeChip(self, color, playerNumber):
+    def placeChip(self, color, playerNumber: int):
         global background
         if self.isEmpty():
             background.delete(self.playerChip)
@@ -329,6 +329,7 @@ class Player:
 
 # Feld Größe Einstellung
 size = 130
+connect = 4
 
 defaultSpielfeldFarbe = 'blue'
 
@@ -500,7 +501,6 @@ def nextRound():
     roundNumber = roundNumber + 1
     print('Round Number:', roundNumber)
     playerListBar.tauscheSpielerAnDerReihe()
-    winCheck()
 
 
 # alle Vierecke werden in einer Reihe zu einem Spielfeld zusammen gesetzt
@@ -541,9 +541,10 @@ def createControlButton(row):
 
 # setzt den Chip an der richtigen stelle, damit die Physics funtkionieren
 def handlePlayerChip(row):
-    feld = getPositonForChip(row)
+    feld: VierGewinntFeld = getPositonForChip(row)
     if feld is not None:
-        feld.placeChip(spielerAnDerReihe.getPlayerColor(), spielerAnDerReihe)
+        feld.placeChip(spielerAnDerReihe.getPlayerColor(), spielerAnDerReihe.getPlayerNumber())
+        winCheck(feld, spielerAnDerReihe.getPlayerNumber())
         nextRound()
 
 
@@ -557,18 +558,32 @@ def getPositonForChip(row):
 
 # Helferfunktion, mit der man eine vertikale Reihe bekommt
 def getFelderReihe(vertikaleReihenNummer):
-    for index, vertikaleListe in enumerate(spielfeld):
-        if index == vertikaleReihenNummer:
-            return vertikaleListe
+    return spielfeld[vertikaleReihenNummer]
+
+
+#    for index, vertikaleListe in enumerate(spielfeld):
+#        if index == vertikaleReihenNummer:
+#            return vertikaleListe
 
 
 # Bekommt das Feld, mit den angegebenen Koordinaten
-def getFeld(horizontaleNummer, vertikaleNummer):
+def getFeld(horizontaleNummer: int, vertikaleNummer: int):
+    #    return spielfeld[horizontaleNummer][vertikaleNummer]
     for indexVertikal, vertikaleListe in enumerate(spielfeld):
         if indexVertikal == horizontaleNummer:
             for indexHorizontal, viereck in enumerate(vertikaleListe):
+                viereck: VierGewinntFeld
                 if indexHorizontal == vertikaleNummer:
                     return viereck
+    return None
+
+
+def getPlayerNumberOfFeld(horizontaleNummer: int, vertikaleNummer: int):
+    feld = getFeld(horizontaleNummer, vertikaleNummer)
+    if feld is not None:
+        return feld.getPlayerNumber()
+    else:
+        return 0
 
 
 # löscht alle Elemente, die im Spielmenü da sind
@@ -647,7 +662,10 @@ def backToStartMenu():
 
 def restartGame():
     global playerListBar
+    global spielerAnDerReihe
+
     playerListBar.setSpielerAnDerReihe(1)
+    spielerAnDerReihe = player1
 
     global roundNumber
     roundNumber = 0
@@ -660,40 +678,76 @@ def restartGame():
                 viereck.placeChip('grey', 0)
 
 
-def winCheck():
-    for playerNumber in range(1, 2):
-        print(playerNumber)
-        for y in range(6):
-            for x in range(1, 5):
-                if (spielfeld[y][x].getPlayerNumber() == playerNumber and
-                    spielfeld[y][x + 1].getPlayerNumber() == playerNumber and 
-                    spielfeld[y][x + 2].getPlayerNumber() == playerNumber and 
-                    spielfeld[y][x + 3].getPlayerNumber() == playerNumber):
-                    print('Der Spieler', playerNumber, 'hat gewonnen!')
+def winCheck(viereck: VierGewinntFeld, playerNumber: int):
+    print('--------------------------------------------------------------------')
+    print(viereck.horizontal, viereck.vertikal)
+    print(getPlayerNumberOfFeld(viereck.horizontal, viereck.vertikal - 1))
 
-        for y in range(3):
-            for x in range(1, 8):
-                if (spielfeld[y][x].getPlayerNumber() == playerNumber and 
-                    spielfeld[y + 1][x].getPlayerNumber() == playerNumber and 
-                    spielfeld[y][x + 2].getPlayerNumber() == playerNumber and
-                    spielfeld[y][x + 3].getPlayerNumber() == playerNumber):
-                    print('Der Spieler', playerNumber, 'hat gewonnen!')
+    #    if viereck.getPlayerNumber() == playerNumber and getPlayerNumberOfFeld(viereck.horizontal + 1, viereck.vertikal) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal + 2, viereck.vertikal == playerNumber and getPlayerNumberOfFeld(viereck.horizontal + 3, viereck.vertikal) == playerNumber):
+    #        print('Der Spieler', playerNumber, 'hat gewonnen!')
+    #
+    #    elif viereck.getPlayerNumber() == playerNumber and getPlayerNumberOfFeld(viereck.horizontal - 1, viereck.vertikal) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal - 2, viereck.vertikal) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal - 3, viereck.vertikal) == playerNumber:
+    #        print('Der Spieler', playerNumber, 'hat gewonnen!')
+    #
+    #    elif  viereck.getPlayerNumber() == playerNumber and getPlayerNumberOfFeld(viereck.horizontal, viereck.vertikal + 1) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal, viereck.vertikal + 2) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal, viereck.vertikal + 3) == playerNumber:
+    #        print('Der Spieler', playerNumber, 'hat gewonnen!')
+    #
+    #    elif viereck.getPlayerNumber() == playerNumber and getPlayerNumberOfFeld(viereck.horizontal, viereck.vertikal - 1) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal, viereck.vertikal - 2) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal, viereck.vertikal - 3) == playerNumber:
+    #        print('Der Spieler', playerNumber, 'hat gewonnen!')
+    #
+    #    elif viereck.getPlayerNumber() == playerNumber and getPlayerNumberOfFeld(viereck.horizontal + 1, viereck.vertikal + 1) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal + 2, viereck.vertikal + 2) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal + 3, viereck.vertikal + 3) == playerNumber:
+    #        print('Der Spieler', playerNumber, 'hat gewonnen!')
+    #
+    #    elif viereck.getPlayerNumber() == playerNumber and getPlayerNumberOfFeld(viereck.horizontal - 1, viereck.vertikal - 1) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal - 2, viereck.vertikal - 2) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal - 3, viereck.vertikal - 3) == playerNumber:
+    #        print('Der Spieler', playerNumber, 'hat gewonnen!')
+    #
+    #    elif viereck.getPlayerNumber() == playerNumber and getPlayerNumberOfFeld(viereck.horizontal + 1, viereck.vertikal - 1) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal + 2, viereck.vertikal - 2) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal + 3, viereck.vertikal - 3) == playerNumber:
+    #        print('Der Spieler', playerNumber, 'hat gewonnen!')
+    #
+    #    elif viereck.getPlayerNumber() == playerNumber and getPlayerNumberOfFeld(viereck.horizontal - 1, viereck.vertikal + 1) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal - 2, viereck.vertikal + 2) == playerNumber and getPlayerNumberOfFeld(viereck.horizontal - 3, viereck.vertikal + 3) == playerNumber:
+    #        print('Der Spieler', playerNumber, 'hat gewonnen!')
 
-        for y in range(3):
-            for x in range(1, 5):
-                if (spielfeld[y][x].getPlayerNumber() == playerNumber and 
-                    spielfeld[y + 1][x + 1].getPlayerNumber() == playerNumber and 
-                    spielfeld[y + 2][x + 2].getPlayerNumber() == playerNumber and 
-                    spielfeld[y + 3][x + 3].getPlayerNumber() == playerNumber):
-                    print('Der Spieler', playerNumber, 'hat gewonnen!')
+    for y in range(6):
+        for x in range(1, 5):
+            if (checkSingleFieldWin(y, x, playerNumber) and
+                    checkSingleFieldWin(y, x + 1, playerNumber) and
+                    checkSingleFieldWin(y, x + 2, playerNumber) and
+                    checkSingleFieldWin(y, x + 3, playerNumber)):
+                print('Der Spieler', playerNumber, 'hat gewonnen!')
 
-        for y in range(3, 6):
-            for x in range(1, 6):
-                if (spielfeld[y][x].getPlayerNumber() == playerNumber and 
-                    spielfeld[y - 1][x + 1].getPlayerNumber() == playerNumber and 
-                    spielfeld[y - 2][x + 2].getPlayerNumber() == playerNumber and 
-                    spielfeld[y - 3][x + 3].getPlayerNumber() == playerNumber):
-                    print('Der Spieler', playerNumber, 'hat gewonnen!')
+    for y in range(3):
+        for x in range(1, 8):
+            if (checkSingleFieldWin(y, x) and
+                    checkSingleFieldWin(y + 1, x, playerNumber) and
+                    checkSingleFieldWin(y + 2, x, playerNumber) and
+                    checkSingleFieldWin(y + 3, x, playerNumber)):
+                print('Der Spieler', playerNumber, 'hat gewonnen!')
+
+    for y in range(3):
+        for x in range(1, 5):
+            if (checkSingleFieldWin(y, x, playerNumber) and
+                    checkSingleFieldWin(y + 1, x + 1, playerNumber) and
+                    checkSingleFieldWin(y + 2, x + 2, playerNumber) and
+                    checkSingleFieldWin(y + 3, x + 3, playerNumber)):
+                print('Der Spieler', playerNumber, 'hat gewonnen!')
+
+    for y in range(3, 6):
+        for x in range(1, 6):
+            if (checkSingleFieldWin(y, x, playerNumber) and
+                    checkSingleFieldWin(y - 1, x + 1, playerNumber) and
+                    checkSingleFieldWin(y - 2, x + 2, playerNumber) and
+                    checkSingleFieldWin(y - 3, x + 3, playerNumber)):
+                print('Der Spieler', playerNumber, 'hat gewonnen!')
+
+
+def checkSingleFieldWin(horizontaleNummer: int, vertikaleNummer: int, playerNumber: int):
+    if getFeld(horizontaleNummer, vertikaleNummer) is not None:
+        if getFeld(horizontaleNummer, vertikaleNummer).getPlayerNumber() == playerNumber:
+            return True
+        else:
+            return False
+    else:
+        return False
 
 
 gui.mainloop()
