@@ -11,7 +11,7 @@ print('max. Länge:', width)
 print('max. Höhe:', height)
 
 
-# Repräsentiert das Settings Menu im Hauptmenü
+# Repräsentiert das Settings Menu im Startmenü
 class Settings:
     def __init__(self):
         self.settingsButton = None
@@ -38,11 +38,11 @@ class Settings:
         # löschen des Menu Buttons
         self.deleteMenuButton()
 
-        # löschen des Haupt Menus
-        deleteHauptMenu()
+        # löschen des Startmenüs
+        deleteStartMenu()
 
         backButton = Button(gui, width=30, height=6, bg=buttonColor)
-        backButton["text"] = "Zurück"
+        backButton["text"] = "Zurück zum Startmenü"
         backButton["command"] = lambda: self.backToStartMenu()
         backButton.place(x=890, y=650)
         self.options.append(backButton)
@@ -114,7 +114,7 @@ class InGameMenu:
     def openMenu(self):
         if not self.statusOpen:
             self.backToSMButton = Button(gui, width=20, height=5, bg=buttonColor)
-            self.backToSMButton["text"] = "Zurück zum Hauptmenü"
+            self.backToSMButton["text"] = "Zurück zum Startmenü"
             self.backToSMButton["command"] = lambda: backToStartMenu()
             self.backToSMButton.place(x=1710, y=190)
 
@@ -374,7 +374,7 @@ spielerAnDerReihe = player1
 roundNumber = 0
 
 # Stellt dar, ob das Game restarted wurde oder nicht →
-# wird gebraucht um in startGame() die Buttons und usw vom Hauptmenu zu löschen
+# wird gebraucht um in startGame() die Buttons und usw vom Startmenü zu löschen
 restarted = False
 
 # kann das Setzen von Chips verhindern
@@ -393,7 +393,7 @@ def createPlayerChip(canvas, x, y, chipSize, color):
     return chip
 
 
-# setzen der Chip Variablen für die Spieler im Hauptmenü
+# setzen der Chip Variablen für die Spieler im Startmenü
 chip1 = createPlayerChip(background, 800, 310, 80, colorOfPlayer1)
 chip2 = createPlayerChip(background, 800, 410, 80, colorOfPlayer2)
 
@@ -420,7 +420,7 @@ tf_player2 = Entry(gui, bg=textFeldColor, width=25, font=("Purisa", 14))
 tf_player2.place(x=900, y=440)
 tf_player2.insert(0, 'Spieler 2')
 
-# Settings Menu im Hauptmenü
+# Settings Menu im Startmenü
 settingsMenu = Settings()
 settingsMenu.createButton()
 
@@ -457,7 +457,7 @@ def chooseColorPlayer2():
     background.itemconfig(chip2, fill=colorOfPlayer2)
 
 
-def deleteHauptMenu():
+def deleteStartMenu():
     global player1
     global player2
     global background
@@ -497,7 +497,7 @@ def startGame():
         createControlButtons()
         menu.createMenuButton()
 
-        deleteHauptMenu()
+        deleteStartMenu()
 
         checkRestart()
 
@@ -505,7 +505,7 @@ def startGame():
         print("Keine Namen sind gesetzt")
 
 
-# Überprüft, ob das Spiel restarted wurde → im Fall, das es restartet werden, muss werden die Hauptmenüelemente gelöscht
+# Überprüft, ob das Spiel restarted wurde → im Fall, das es restartet werden muss, werden die Startmenüelemente gelöscht
 def checkRestart():
     global restarted
     global menu
@@ -788,7 +788,7 @@ def winScreen(player: Player):
     restartButton.place(x=867, y=610)
 
     backButton = Button(gui, width=25, height=4, bg=buttonColor)
-    backButton["text"] = "Zurück zum Hauptmenü"
+    backButton["text"] = "Zurück zum Startmenü"
     backButton["command"] = lambda: backToStartMenuFromWinScreen(backButton, restartButton, rectangle, text, text2, text3)
     backButton.place(x=867, y=690)
 
