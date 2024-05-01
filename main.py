@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import colorchooser
+import random
 
 gui = Tk()
 width, height = gui.winfo_screenwidth(), gui.winfo_screenheight()
@@ -11,13 +12,87 @@ print('max. Länge:', width)
 print('max. Höhe:', height)
 
 
+class MultilineDescription:
+    def __init__(self, description: str, maxChar, font, x: int, y: int):
+        global background
+        descList: list[str] = [description[i:i+maxChar] for i in range(0, len(description), maxChar)]
+
+        abstand = 20
+        self.textList = []
+
+        for index, desc in enumerate(descList):
+            self.textList.append(background.create_text(x, y + (abstand * index), text=desc, font=font))
+
+    def destroy(self):
+        global background
+        for index, text in enumerate(self.textList):
+            background.delete(text)
+
+
+class SwitchStateButton:
+    def __init__(self, desc: str, textSize: int, maxChar: int, x, y, w, h, color, stateList: list, defaultState):
+        global buttonColor
+        correctColor = color
+        if correctColor is None:
+            correctColor = buttonColor
+
+        self.desc = desc
+        self.color = correctColor
+
+        self.button = None
+
+        self.states: list = stateList
+        self.defaultState: int = self.states.index(defaultState)
+        self.currentState: int = self.states.index(defaultState)
+
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+
+        self.descText = None
+        self.textSize = textSize
+        self.maxChar = maxChar
+
+    def create(self):
+        self.button: Button = Button(gui, width=self.w, height=self.h, bg=self.color)
+        self.button["text"] = str(self.states[self.currentState])
+        self.button["command"] = lambda: self.switchState()
+        self.button.place(x=self.x, y=self.y)
+
+        self.descText = MultilineDescription(self.desc, self.maxChar, ('Purisa', self.textSize), self.x - self.h, self.y - self.w + self.textSize + 10)
+
+        return self
+
+    def destroy(self):
+        self.button.destroy()
+        self.descText.destroy()
+
+    def getButton(self):
+        return self.button
+
+    def getCurrentState(self):
+        return self.states.index(self.currentState)
+
+    def switchState(self):
+        newState = self.currentState + 1
+        if newState == len(self.states):
+            newState = self.currentState - 1
+        self.switchStateTo(newState)
+        self.currentState = newState
+
+    def switchStateTo(self, state: int):
+        if state != self.currentState:
+            self.button.configure(text=str(self.states[state]))
+
+
 # Repräsentiert das Settings Menu im Startmenü
 class Settings:
+
     def __init__(self):
         self.settingsButton = None
-        self.controlButtons = False
         # Liste aller interaktiven Schaltfläschen, die Beteiligt sind
-        self.options = []
+        self.options: list = []
 
     # Erstellt den Button, um auf das Menu zugreifen zu können
     def createButton(self):
@@ -41,44 +116,58 @@ class Settings:
         # löschen des Startmenüs
         deleteStartMenu()
 
-        backButton = Button(gui, width=30, height=6, bg=buttonColor)
-        backButton["text"] = "Zurück zum Startmenü"
-        backButton["command"] = lambda: self.backToStartMenu()
-        backButton.place(x=890, y=650)
-        self.options.append(backButton)
+        if self.buttonDontExist(0):
+            backButton = Button(gui, width=30, height=6, bg=buttonColor)
+            backButton["text"] = "Zurück zum Startmenü"
+            backButton["command"] = lambda: self.backToStartMenu()
+            backButton.place(x=890, y=650)
+            self.options.append(backButton)
+        else:
+            backButton = Button(gui, width=30, height=6, bg=buttonColor)
+            backButton["text"] = "Zurück zum Startmenü"
+            backButton["command"] = lambda: self.backToStartMenu()
+            backButton.place(x=890, y=650)
+            self.options[0] = backButton
 
-        controlOption = Button(gui, width=30, height=6, bg=buttonColor)
-        controlOption["text"] = str(self.controlButtons)
-        controlOption["command"] = lambda: self.switchControlButtonState()
-        controlOption.place(x=890, y=540)
-        self.options.append(controlOption)
+        if self.buttonDontExist(1):
+            controlOption: SwitchStateButton = SwitchStateButton("Tasten", 15, 10, 650, 650, 30, 6, None, [False, True], False).create()
+            self.options.append(controlOption)
+        else:
+            self.options[1].create()
+
+        if self.buttonDontExist(2):
+            controlOption: SwitchStateButton = SwitchStateButton("Really Nice Button (; lol", 15, 10, 890, 440, 30, 6, None, [False, True], False).create()
+            self.options.append(controlOption)
+        else:
+            self.options[2].create()
+
+    def buttonDontExist(self, number: int):
+        for index, button in enumerate(self.options):
+            if index == number:
+                return False
+        return True
+
+    def getButtonState(self, number: int, defaultReturn):
+        for index, button in enumerate(self.options):
+            button: SwitchStateButton
+            if index == number:
+                return button.getCurrentState()
+        return defaultReturn
+
+    def getButton(self, number: int):
+        return self.options[number]
 
     # löscht die Buttons vom Einstellungs Menu
     def deleteOptions(self):
         for index, button in enumerate(self.options):
-            button: Button
             button.destroy()
-
-        self.options.clear()
+        # self.options.clear()
 
     # geht wieder zurück zum Startbildschirm
     def backToStartMenu(self):
         self.deleteMenuButton()
         self.deleteOptions()
         createStartMenu()
-
-    # ändert den Button Text zwischen True und False, wenn die Einstellung geändert wird
-    def switchControlButtonState(self):
-        if not self.controlButtons:
-            self.controlButtons = True
-            button = self.options[1]
-            button['text'] = str(self.controlButtons)
-            self.options[1] = button
-        else:
-            self.controlButtons = False
-            button = self.options[1]
-            button['text'] = str(self.controlButtons)
-            self.options[1] = button
 
 
 # Repräsentiert das in Game Menu
@@ -175,14 +264,16 @@ class PlayerListBar:
         global spielerAnDerReihe
         global otherPlayerColor
 
-        self.Rechteck = background.create_rectangle(0, 0, 1920, 60, fill=playerListBarColor, outline=playerListBarOutlineColor)
+        self.Rechteck = background.create_rectangle(0, 0, 1920, 60, fill=playerListBarColor,
+                                                    outline=playerListBarOutlineColor)
         self.Bindestrich = background.create_text(960, 30, text='-', fill='#000000', font=('Purisa', 22))
 
         if spielerAnDerReihe.getPlayerNumber() == 1:
             self.Spieler1 = background.create_text(820, 30, text=player1.name, fill=player1.getPlayerColor(),
                                                    font=('Purisa', 18, 'bold'))
         else:
-            self.Spieler1 = background.create_text(820, 30, text=player1.name, fill=otherPlayerColor, font=('Purisa', 18))
+            self.Spieler1 = background.create_text(820, 30, text=player1.name, fill=otherPlayerColor,
+                                                   font=('Purisa', 18))
 
         if spielerAnDerReihe.getPlayerNumber() == 2:
             self.Spieler2 = background.create_text(1100, 30, text=player2.name, fill=player2.getPlayerColor(),
@@ -260,7 +351,7 @@ class VierGewinntFeld:
         self.feld = background.create_rectangle(feld_x, feld_y, feld_x + size,
                                                 feld_y + size, fill=self.farbe)
 
-        if not settingsMenu.controlButtons:
+        if not settingsMenu.getButtonState(1, False):
             # gibt dem Feld die Funktion bei einem Linksklick, den Chip mit Physics hinzusetzten
             background.tag_bind(self.feld, '<Button-1>', lambda a: handlePlayerChip(self.vertikal))
 
@@ -295,7 +386,7 @@ class VierGewinntFeld:
         offset = 20
         self.playerChip = createPlayerChip(background, feld_x + offset, feld_y + offset, size - offset * 2, color)
 
-        if not settingsMenu.controlButtons:
+        if not settingsMenu.getButtonState(1, False):
             # gibt dem Chip die Funktion bei einem Linksklick, den Chip mit Physics hinzusetzten
             background.tag_bind(self.playerChip, '<Button-1>', lambda a: handlePlayerChip(self.vertikal))
 
@@ -335,7 +426,7 @@ class Player:
 size = 130
 
 # Überprüfungsgröße
-connect = 5
+connect = 4
 
 # Farben
 defaultSpielfeldFarbe = '#2000FF'
@@ -499,6 +590,11 @@ def startGame():
 
         deleteStartMenu()
 
+        startButton2 = Button(gui, width=20, height=5, bg=buttonColor)
+        startButton2["text"] = "CPU"
+        startButton2["command"] = lambda: compGegner()
+        startButton2.place(x=1710, y=150)
+
         checkRestart()
 
     else:
@@ -548,7 +644,7 @@ def setupSpielFeld():
 
 # erstellt die Buttons, die in der Reihe einen neuen Chip hineinsetzten können
 def createControlButtons():
-    if settingsMenu.controlButtons:
+    if settingsMenu.getButtonState(1, False):
         for y in range(1, verticalFeldNumber):
             createControlButton(y)
 
@@ -737,10 +833,12 @@ def checkSingleLineClear(horizontaleNummer: int, vertikaleNummer: int, operation
             feldWinListCheckOne.append(checkSingleFieldWin(horizontaleNummer + index, vertikaleNummer, playerNumber))
     elif operationType == 3:
         for index in range(connect):
-            feldWinListCheckOne.append(checkSingleFieldWin(horizontaleNummer + index, vertikaleNummer + index, playerNumber))
+            feldWinListCheckOne.append(
+                checkSingleFieldWin(horizontaleNummer + index, vertikaleNummer + index, playerNumber))
     elif operationType == 4:
         for index in range(connect):
-            feldWinListCheckOne.append(checkSingleFieldWin(horizontaleNummer - index, vertikaleNummer + index, playerNumber))
+            feldWinListCheckOne.append(
+                checkSingleFieldWin(horizontaleNummer - index, vertikaleNummer + index, playerNumber))
 
     for index, feld in enumerate(feldWinListCheckOne):
         if feld is not None:
@@ -777,7 +875,8 @@ def winScreen(player: Player):
 
     rectangle = background.create_rectangle(840, 450, 1080, 800, fill="#3A3A3A", outline='#6F6F6F')
     text = background.create_text(960, 500, text="Der Spieler", fill="black", font=("Purisa", 20))
-    text2 = background.create_text(960, 535, text=player.getName(), fill=player.getPlayerColor(), font=("Purisa", 20, "bold"))
+    text2 = background.create_text(960, 535, text=player.getName(), fill=player.getPlayerColor(),
+                                   font=("Purisa", 20, "bold"))
     text3 = background.create_text(960, 565, text="hat gewonnen", fill="black", font=("Purisa", 20))
 
     menu.deleteAllButtons()
@@ -789,11 +888,16 @@ def winScreen(player: Player):
 
     backButton = Button(gui, width=25, height=4, bg=buttonColor)
     backButton["text"] = "Zurück zum Startmenü"
-    backButton["command"] = lambda: backToStartMenuFromWinScreen(backButton, restartButton, rectangle, text, text2, text3)
+    backButton["command"] = lambda: backToStartMenuFromWinScreen(backButton, restartButton, rectangle, text, text2,
+                                                                 text3)
     backButton.place(x=867, y=690)
 
 
 def backToStartMenuFromWinScreen(backButton: Button, restartButton: Button, rectangle, text, text2, text3):
+    global background
+
+    print("Successfuly Restartet")
+
     backButton.destroy()
     restartButton.destroy()
     background.delete(rectangle)
@@ -816,6 +920,19 @@ def restartFromWinScreen(backButton: Button, restartButton: Button, rectangle, t
     background.delete(text3)
     menu.createMenuButton()
     restartGame()
+
+
+def compGegner():
+    row = random.randint(0, verticalFeldNumber - 1)
+    feld: VierGewinntFeld = getPositonForChip(row)
+
+    print("Random CPU Row:", row)
+
+    if feld is not None:
+        if shouldPlaceChip:
+            feld.placeChip(spielerAnDerReihe.getPlayerColor(), spielerAnDerReihe.getPlayerNumber())
+        winCheck(spielerAnDerReihe.getPlayerNumber())
+        nextRound()
 
 
 gui.mainloop()
