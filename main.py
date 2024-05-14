@@ -12,10 +12,325 @@ print('max. Länge:', width)
 print('max. Höhe:', height)
 
 
-class MultilineDescription:
-    def __init__(self, description: str, maxChar, font, x: int, y: int):
+# Repräsentiert einen Spieler
+class Player:
+
+    # Initialisierung des Spielers
+    def __init__(self, playerColor, name, playerNumber):
+        self.playerNumber = playerNumber
+        self.playerColor = playerColor
+        self.name = name
+        self.computerGegner = False
+
+    def getName(self):
+        return self.name
+
+    def getPlayerColor(self):
+        return self.playerColor
+
+    def setPlayerColor(self, playerColor):
+        self.playerColor = playerColor
+
+    def setName(self, name):
+        self.name = name
+
+    def getPlayerNumber(self):
+        return self.playerNumber
+
+    def setComputerGegner(self, computerGegner: bool):
+        self.computerGegner = computerGegner
+
+
+# Screen System, um schnell vom einem zu einem andern Screen zu wechseln
+class Screen:
+    def __init__(self, name: str):
+        self.name = name
+        self.cachedScreens = []
+
+    def create(self):
+        pass
+
+    def clearCache(self):
+        for index, screen in enumerate(self.cachedScreens):
+            screen.delete()
+
+    def delete(self):
+        pass
+
+    def shouldDeleteOldScreen(self) -> bool:
+        pass
+
+    def onSwitch(self):
+        pass
+
+    def addOverlayScreen(self, overlay):
+        overlay: Screen
+        overlay.create()
+        self.cachedScreens.append(overlay)
+
+    def switchTo(self, toScreen):
+        global currentScreen
+
+        self.onSwitch()
+
+        if toScreen.shouldDeleteOldScreen():
+            self.delete()
+        else:
+            self.cachedScreens.append(self)
+
+        if isinstance(toScreen, Screen):
+            toScreen: Screen
+            toScreen.create()
+            print("switched to:", toScreen.name)
+        else:
+            print("Die toScreen Variabel ist kein Screen! Derzeitiger Type der Variabel:", type(toScreen))
+
+        currentScreen = toScreen
+
+
+class StartScreen(Screen):
+
+    def __init__(self):
+        super().__init__("StartScreen")
+        self.chip1 = None
+        self.chip2 = None
+        self.vierGewinntText = None
+        self.startButton = None
+        self.tf_player1 = None
+        self.tf_player2 = None
+        self.settingsButton = None
+
+    def create(self):
+        global spielfeld
+        global player1
+        global player2
+        global shouldPlaceChip
+        global textFeldColor
+        global buttonColor
+
+        self.chip1 = createPlayerChip(background, 800, 310, 80, colorOfPlayer1)
+        self.chip2 = createPlayerChip(background, 800, 410, 80, colorOfPlayer2)
+
+        background.tag_bind(self.chip1, '<Button-1>', lambda a: self.chooseColorPlayer1())
+        background.tag_bind(self.chip2, '<Button-1>', lambda a: self.chooseColorPlayer2())
+
+        self.vierGewinntText = background.create_text(960, 200, text="Vier Gewinnt", fill="black", font=("Purisa", 100))
+
+        # Button und Textfeld code(Startbildschirm)
+
+        if self.startButton is None:
+            # Start Button wird gesetzt
+            self.startButton = Button(gui, width=30, height=6, bg=buttonColor)
+            self.startButton["text"] = "Start"
+            self.startButton["command"] = lambda: currentScreen.switchTo(SpielfeldScreen())
+            self.startButton.place(x=890, y=540)
+        else:
+            self.startButton.place(x=890, y=540)
+
+        if self.tf_player1 is None:
+            # Textfeld für Spieler 1
+            self.tf_player1 = Entry(gui, bg=textFeldColor, width=25, font=("Purisa", 14))
+            self.tf_player1.place(x=900, y=340)
+            self.tf_player1.insert(0, playerName1)
+        else:
+            self.tf_player1.place(x=900, y=340)
+
+        if self.tf_player2 is None:
+            # Textfeld für Spieler 2
+            self.tf_player2 = Entry(gui, bg=textFeldColor, width=25, font=("Purisa", 14))
+            self.tf_player2.place(x=900, y=440)
+            self.tf_player2.insert(0, playerName2)
+        else:
+            self.tf_player2.place(x=900, y=440)
+
+        shouldPlaceChip = True
+
+        if self.settingsButton is None:
+            self.settingsButton = Button(gui, width=30, height=6, bg=buttonColor)
+            self.settingsButton["text"] = "Einstellungen"
+            self.settingsButton["command"] = lambda: self.switchTo(Settings())
+            self.settingsButton.place(x=890, y=650)
+        else:
+            self.settingsButton.place(x=890, y=650)
+
+        return self
+
+    def onSwitch(self):
+        global player1
+        global player2
+        global playerName1
+        global playerName2
+        global colorOfPlayer1
+        global colorOfPlayer2
+
+        playerName1 = self.tf_player1.get()
+        playerName2 = self.tf_player2.get()
+        player1.setName(self.tf_player1.get())
+        player2.setName(self.tf_player2.get())
+        player1.setPlayerColor(colorOfPlayer1)
+        player2.setPlayerColor(colorOfPlayer2)
+
+    def delete(self):
+        global player1
+        global player2
         global background
-        descList: list[str] = [description[i:i+maxChar] for i in range(0, len(description), maxChar)]
+        global menu
+
+        background.delete(self.chip1)
+        background.delete(self.chip2)
+        background.delete(self.vierGewinntText)
+        self.startButton.place_forget()
+        self.tf_player1.place_forget()
+        self.tf_player2.place_forget()
+        self.settingsButton.place_forget()
+        return self
+
+    # öffnet das Color Chooser Menu für Spieler 1 und setzt die Farbe, wenn sie verändert wurde
+    def chooseColorPlayer1(self):
+        global colorOfPlayer1
+        colorOfPlayer1 = colorchooser.askcolor(title="Choose color", initialcolor=colorOfPlayer1)[1]
+        background.itemconfig(self.chip1, fill=colorOfPlayer1)
+
+    # öffnet das Color Chooser Menu für Spieler 2 und setzt die Farbe, wenn sie verändert wurde
+    def chooseColorPlayer2(self):
+        global colorOfPlayer2
+        colorOfPlayer2 = colorchooser.askcolor(title="Choose color", initialcolor=colorOfPlayer2)[1]
+        background.itemconfig(self.chip2, fill=colorOfPlayer2)
+
+    def shouldDeleteOldScreen(self) -> bool:
+        return True
+
+
+class ErrorScreen(Screen):
+
+    def __init__(self):
+        super().__init__("ErrorScreen")
+
+    def create(self):
+        print("created!")
+
+    def delete(self):
+        print("(; deleted!")
+
+    def shouldDeleteOldScreen(self) -> bool:
+        return True
+
+
+class SpielfeldScreen(Screen):
+
+    def __init__(self):
+        super().__init__("SpielfeldScreen")
+
+    def create(self):
+        if player1.name != "" and player2.name != "":
+            # alle Vierecke werden in einer Reihe zu einem Spielfeld zusammen gesetzt
+            # x Koordinate Berechnung
+            for v in range(1, verticalFeldNumber):
+                # y Koordinate Berechnung
+                horizontalLineList = []
+                for h in range(1, horizontalFeldNumber):
+                    feld = VierGewinntFeld(h, v)
+                    horizontalLineList.append(feld)
+                spielfeld.append(horizontalLineList)
+
+            # erstellt die Spieler Leiste und setzt die Variable
+            global playerListBar
+            playerListBar.createPlayerListBar()
+
+            createControlButtons()
+
+            menu.createMenuButton()
+
+            # Nur zum Testen da
+            startButton2 = Button(gui, width=20, height=5, bg=buttonColor)
+            startButton2["text"] = "CPU"
+            startButton2["command"] = lambda: compGegner()
+            startButton2.place(x=100, y=150)
+
+            # checkRestart()
+
+            onRoundStart()
+        else:
+            currentScreen.switchTo(StartScreen())
+            print("Keine Namen sind gesetzt")
+
+    def delete(self):
+        global spielerAnDerReihe
+        global restarted
+        global win
+        global roundNumber
+        global menu
+        global background
+        global spielfeld
+        global buttons
+        global playerListBar
+        playerListBar.delete()
+
+        for indexVertikal, listeVertikal in enumerate(spielfeld):
+            for indexHorizontal, viereck in enumerate(listeVertikal):
+                background.delete(viereck.feld)
+                viereck.deleteChip()
+
+        for i, button in enumerate(buttons):
+            button.destroy()
+
+        spielfeld.clear()
+        buttons.clear()
+        menu.deleteAllButtons()
+
+        spielerAnDerReihe = player1
+
+        win = False
+        roundNumber = 0
+
+    def onSwitch(self):
+        self.clearCache()
+
+    def shouldDeleteOldScreen(self) -> bool:
+        return True
+
+
+class SyncedTextField:
+    def __init__(self, x: int, y: int, w: int, font, defaultOption, desc: str, maxChar: int):
+        self.x = x
+        self.y = y
+        self.w = w
+        self.font = font
+        # self.defaultOption = defaultOption
+        self.currentOption = defaultOption
+        self.desc = desc
+        self.maxChar = maxChar
+        self.textField: Entry = Entry(gui, bg=textFeldColor, width=self.w, font=self.font)
+        self.textField.place(x=self.x, y=self.y)
+        self.textField.insert(0, self.currentOption)
+
+        descList: list[str] = [self.desc[i:i + self.maxChar] for i in range(0, len(self.desc), self.maxChar)]
+        self.descItem = MultilineDescription(self.desc, self.maxChar, self.font, self.x + (self.w * 5.6),
+                                             self.y - (len(descList) * 20))
+
+    def getCurrentOption(self):
+        if self.textField is not None:
+            self.currentOption = self.textField.get()
+            return self.currentOption
+        else:
+            return self.currentOption
+
+    def destroy(self):
+        self.textField.place_forget()
+        self.descItem.destroy()
+
+    def show(self):
+        self.textField.place(x=self.x, y=self.y)
+
+        descList: list[str] = [self.desc[i:i + self.maxChar] for i in range(0, len(self.desc), self.maxChar)]
+        self.descItem = MultilineDescription(self.desc, self.maxChar, self.font, self.x + (self.w * 5.6),
+                                             self.y - (len(descList) * 20))
+
+
+class MultilineDescription:
+    def __init__(self, description: str, maxChar, font, x, y):
+        global background
+        descList: list[str] = [description[i:i + maxChar] for i in range(0, len(description), maxChar)]
 
         abstand = 20
         self.textList = []
@@ -55,17 +370,25 @@ class SwitchStateButton:
         self.maxChar = maxChar
 
     def create(self):
-        self.button: Button = Button(gui, width=self.w, height=self.h, bg=self.color)
-        self.button["text"] = str(self.states[self.currentState])
-        self.button["command"] = lambda: self.switchState()
-        self.button.place(x=self.x, y=self.y)
+        if self.button is None:
+            print("recreate")
+            self.button: Button = Button(gui, width=self.w, height=self.h, bg=self.color)
+            self.button["text"] = str(self.states[self.currentState])
+            self.button["command"] = lambda: self.switchState()
+            self.button.place(x=self.x, y=self.y)
+        else:
+            self.button.place(x=self.x, y=self.y)
 
-        self.descText = MultilineDescription(self.desc, self.maxChar, ('Purisa', self.textSize), self.x - self.h, self.y - self.w + self.textSize + 10)
+        descList: list[str] = [self.desc[i:i + self.maxChar] for i in range(0, len(self.desc), self.maxChar)]
+
+        self.descText = MultilineDescription(self.desc, self.maxChar, ('Purisa', self.textSize),
+                                             self.x + (self.w * 3.6),
+                                             self.y - (len(descList) * 20))
 
         return self
 
     def destroy(self):
-        self.button.destroy()
+        self.button.place_forget()
         self.descText.destroy()
 
     def getButton(self):
@@ -87,87 +410,118 @@ class SwitchStateButton:
 
 
 # Repräsentiert das Settings Menu im Startmenü
-class Settings:
+class Settings(Screen):
 
     def __init__(self):
-        self.settingsButton = None
-        # Liste aller interaktiven Schaltfläschen, die Beteiligt sind
-        self.options: list = []
-
-    # Erstellt den Button, um auf das Menu zugreifen zu können
-    def createButton(self):
-        self.settingsButton = Button(gui, width=30, height=6, bg=buttonColor)
-        self.settingsButton["text"] = "Einstellungen"
-        self.settingsButton["command"] = lambda: self.createOptions()
-        self.settingsButton.place(x=890, y=650)
-
-    # löscht nur den Einstellungs Menu Button
-    def deleteMenuButton(self):
-        if self.settingsButton is not None:
-            self.settingsButton: Button
-            self.settingsButton.destroy()
-            self.settingsButton = None
+        super().__init__("SettingsScreen")
 
     # erstellt die Buttons für das Einstellungs Menu
-    def createOptions(self):
-        # löschen des Menu Buttons
-        self.deleteMenuButton()
+    def create(self):
+        global options
 
-        # löschen des Startmenüs
-        deleteStartMenu()
-
-        if self.buttonDontExist(0):
+        if buttonDontExist(0):
             backButton = Button(gui, width=30, height=6, bg=buttonColor)
             backButton["text"] = "Zurück zum Startmenü"
-            backButton["command"] = lambda: self.backToStartMenu()
+            backButton["command"] = lambda: self.switchTo(StartScreen())
             backButton.place(x=890, y=650)
-            self.options.append(backButton)
+            options.append(backButton)
         else:
             backButton = Button(gui, width=30, height=6, bg=buttonColor)
             backButton["text"] = "Zurück zum Startmenü"
-            backButton["command"] = lambda: self.backToStartMenu()
+            backButton["command"] = lambda: self.switchTo(StartScreen())
             backButton.place(x=890, y=650)
-            self.options[0] = backButton
+            options[0] = backButton
 
-        if self.buttonDontExist(1):
-            controlOption: SwitchStateButton = SwitchStateButton("Tasten", 15, 10, 650, 650, 30, 6, None, [False, True], False).create()
-            self.options.append(controlOption)
+        if buttonDontExist(1):
+            controlOption: SwitchStateButton = SwitchStateButton("ControlButtons", 15, 15, 650, 650, 30, 6, None,
+                                                                 [False, True],
+                                                                 False).create()
+            options.append(controlOption)
         else:
-            self.options[1].create()
+            options[1].create()
 
-        if self.buttonDontExist(2):
-            controlOption: SwitchStateButton = SwitchStateButton("Really Nice Button (; lol", 15, 10, 890, 440, 30, 6, None, [False, True], False).create()
-            self.options.append(controlOption)
+        if buttonDontExist(2):
+            controlOption: SwitchStateButton = SwitchStateButton(
+                "Das hier ist bisher nur ein Test Button, für das was du siehst", 15, 10, 890, 440, 30, 6,
+                None, [False, True], False).create()
+            options.append(controlOption)
         else:
-            self.options[2].create()
+            options[2].create()
 
-    def buttonDontExist(self, number: int):
-        for index, button in enumerate(self.options):
-            if index == number:
-                return False
-        return True
+        if buttonDontExist(3):
+            textField: SyncedTextField = SyncedTextField(890, 200, 20, ('Purisa', 15), defaultSpielfeldFarbe,
+                                                         "Ändere die Farbe des Spielfelds", 50)
 
-    def getButtonState(self, number: int, defaultReturn):
-        for index, button in enumerate(self.options):
-            button: SwitchStateButton
-            if index == number:
-                return button.getCurrentState()
-        return defaultReturn
-
-    def getButton(self, number: int):
-        return self.options[number]
+            options.append(textField)
+        else:
+            options[3].show()
 
     # löscht die Buttons vom Einstellungs Menu
-    def deleteOptions(self):
-        for index, button in enumerate(self.options):
+    def delete(self):
+        print("Deleted:", self.name)
+        for index, button in enumerate(options):
             button.destroy()
-        # self.options.clear()
 
-    # geht wieder zurück zum Startbildschirm
-    def backToStartMenu(self):
-        self.deleteMenuButton()
-        self.deleteOptions()
-        createStartMenu()
+    def shouldDeleteOldScreen(self) -> bool:
+        return True
+
+
+class WinScreen(Screen):
+    def __init__(self, winner: Player):
+        super().__init__("WinScreen")
+        self.winner = winner
+        self.rectangle = None
+        self.text = None
+        self.text2 = None
+        self.text3 = None
+        self.restartButton = None
+        self.backButton = None
+
+    def create(self):
+        global shouldPlaceChip
+        global menu
+
+        print("Der Spieler: " + self.winner.getName() + " hat gewonnen")
+
+        shouldPlaceChip = False
+
+        self.rectangle = background.create_rectangle(840, 450, 1080, 800, fill="#3A3A3A", outline='#6F6F6F')
+        self.text = background.create_text(960, 500, text="Der Spieler", fill="black", font=("Purisa", 20))
+        self.text2 = background.create_text(960, 535, text=self.winner.getName(), fill=self.winner.getPlayerColor(),
+                                       font=("Purisa", 20, "bold"))
+        self.text3 = background.create_text(960, 565, text="hat gewonnen", fill="black", font=("Purisa", 20))
+
+        menu.deleteAllButtons()
+
+        self.restartButton = Button(gui, width=25, height=4, bg=buttonColor)
+        self.restartButton["text"] = "Neustart"
+        self.restartButton["command"] = lambda: self.restart()
+        self.restartButton.place(x=867, y=610)
+
+        self.backButton = Button(gui, width=25, height=4, bg=buttonColor)
+        self.backButton["text"] = "Zurück zum Startmenü"
+        self.backButton["command"] = lambda: currentScreen.switchTo(StartScreen())
+        self.backButton.place(x=867, y=690)
+
+    def restart(self):
+        global shouldPlaceChip
+        self.delete()
+        shouldPlaceChip = True
+        menu.createMenuButton()
+        restartGame()
+
+    def delete(self):
+        global background
+
+        background.delete(self.rectangle)
+        background.delete(self.text)
+        background.delete(self.text2)
+        background.delete(self.text3)
+        self.restartButton.destroy()
+        self.backButton.destroy()
+
+    def shouldDeleteOldScreen(self) -> bool:
+        return True
 
 
 # Repräsentiert das in Game Menu
@@ -204,7 +558,7 @@ class InGameMenu:
         if not self.statusOpen:
             self.backToSMButton = Button(gui, width=20, height=5, bg=buttonColor)
             self.backToSMButton["text"] = "Zurück zum Startmenü"
-            self.backToSMButton["command"] = lambda: backToStartMenu()
+            self.backToSMButton["command"] = lambda: currentScreen.switchTo(StartScreen())
             self.backToSMButton.place(x=1710, y=190)
 
             self.restartButton = Button(gui, width=20, height=5, bg=buttonColor)
@@ -323,7 +677,7 @@ class PlayerListBar:
                 background.itemconfig(self.Spieler1, fill=otherPlayerColor, font=('Purisa', 18))
                 background.itemconfig(self.Spieler2, fill=player2.getPlayerColor(), font=('Purisa', 18, 'bold'))
 
-    def deletePlayerListBar(self):
+    def delete(self):
         global background
         background.delete(self.Spieler1)
         background.delete(self.Spieler2)
@@ -338,12 +692,15 @@ class VierGewinntFeld:
     def __init__(self, horizontal, vertikal):
         global background
         global defaultSpielfeldFarbe
+        global horizontalFeldNumber
+        global verticalFeldNumber
+
         # erstellen eines leeren Feldes
         self.playerChip = None
         self.playerNumber = 0
         self.horizontal = horizontal
         self.vertikal = vertikal
-        self.farbe = defaultSpielfeldFarbe
+        self.farbe = getTextfieldOption(3, defaultSpielfeldFarbe)
 
         feld_y = 100 + size * self.horizontal
         feld_x = 375 + size * self.vertikal
@@ -351,7 +708,7 @@ class VierGewinntFeld:
         self.feld = background.create_rectangle(feld_x, feld_y, feld_x + size,
                                                 feld_y + size, fill=self.farbe)
 
-        if not settingsMenu.getButtonState(1, False):
+        if not getButtonState(1, False):
             # gibt dem Feld die Funktion bei einem Linksklick, den Chip mit Physics hinzusetzten
             background.tag_bind(self.feld, '<Button-1>', lambda a: handlePlayerChip(self.vertikal))
 
@@ -386,7 +743,7 @@ class VierGewinntFeld:
         offset = 20
         self.playerChip = createPlayerChip(background, feld_x + offset, feld_y + offset, size - offset * 2, color)
 
-        if not settingsMenu.getButtonState(1, False):
+        if not getButtonState(1, False):
             # gibt dem Chip die Funktion bei einem Linksklick, den Chip mit Physics hinzusetzten
             background.tag_bind(self.playerChip, '<Button-1>', lambda a: handlePlayerChip(self.vertikal))
 
@@ -395,31 +752,6 @@ class VierGewinntFeld:
         global background
         if self.playerChip is not None:
             background.delete(self.playerChip)
-
-
-# Repräsentiert einen Spieler
-class Player:
-
-    # Initialisierung des Spielers
-    def __init__(self, playerColor, name, playerNumber):
-        self.playerNumber = playerNumber
-        self.playerColor = playerColor
-        self.name = name
-
-    def getName(self):
-        return self.name
-
-    def getPlayerColor(self):
-        return self.playerColor
-
-    def setPlayerColor(self, playerColor):
-        self.playerColor = playerColor
-
-    def setName(self, name):
-        self.name = name
-
-    def getPlayerNumber(self):
-        return self.playerNumber
 
 
 # Feld Größe Einstellung
@@ -464,10 +796,6 @@ spielerAnDerReihe = player1
 # Runden Nummer
 roundNumber = 0
 
-# Stellt dar, ob das Game restarted wurde oder nicht →
-# wird gebraucht um in startGame() die Buttons und usw vom Startmenü zu löschen
-restarted = False
-
 # kann das Setzen von Chips verhindern
 shouldPlaceChip = True
 
@@ -484,36 +812,10 @@ def createPlayerChip(canvas, x, y, chipSize, color):
     return chip
 
 
-# setzen der Chip Variablen für die Spieler im Startmenü
-chip1 = createPlayerChip(background, 800, 310, 80, colorOfPlayer1)
-chip2 = createPlayerChip(background, 800, 410, 80, colorOfPlayer2)
+currentScreen = StartScreen().create()
 
-# Wenn der <Button-1> gedrückt wird (links Klick) →
-# wird die Farbe abgefragt über chooseColorPlayer1() / chooseColorPlayer2()
-background.tag_bind(chip1, '<Button-1>', lambda a: chooseColorPlayer1())
-background.tag_bind(chip2, '<Button-1>', lambda a: chooseColorPlayer2())
-
-vierGewinnt = background.create_text(960, 200, text="Vier Gewinnt", fill="black", font=("Purisa", 100))
-
-# Start Button wird gesetzt
-startButton = Button(gui, width=30, height=6, bg=buttonColor)
-startButton["text"] = "Start"
-startButton["command"] = lambda: startGame()
-startButton.place(x=890, y=540)
-
-# Textfeld für Spieler 1
-tf_player1 = Entry(gui, bg=textFeldColor, width=25, font=("Purisa", 14))
-tf_player1.place(x=900, y=340)
-tf_player1.insert(0, 'Spieler 1')
-
-# Textfeld für Spieler 2
-tf_player2 = Entry(gui, bg=textFeldColor, width=25, font=("Purisa", 14))
-tf_player2.place(x=900, y=440)
-tf_player2.insert(0, 'Spieler 2')
-
-# Settings Menu im Startmenü
-settingsMenu = Settings()
-settingsMenu.createButton()
+# Liste aller interaktiven Schaltfläschen im Settings Menu
+options: list = []
 
 # erstellen der InGameMenu Klasse
 menu = InGameMenu()
@@ -525,6 +827,29 @@ spielfeld = []
 playerListBar = PlayerListBar()
 
 
+def buttonDontExist(number: int):
+    for index, button in enumerate(options):
+        if index == number:
+            return False
+    return True
+
+
+def getButtonState(number: int, defaultReturn):
+    for index, button in enumerate(options):
+        button: SwitchStateButton
+        if index == number:
+            return button.getCurrentState()
+    return defaultReturn
+
+
+def getTextfieldOption(number: int, defaultReturn):
+    for index, button in enumerate(options):
+        button: SyncedTextField
+        if index == number:
+            return button.getCurrentOption()
+    return defaultReturn
+
+
 def playerNumberToPlayer(playerNumber: int):
     if playerNumber == 1:
         return player1
@@ -532,89 +857,6 @@ def playerNumberToPlayer(playerNumber: int):
         return player2
     else:
         return None
-
-
-# öffnet das Coolor Chooser Menu für Spieler 1 und setzt die Farbe, wenn sie verändert wurde
-def chooseColorPlayer1():
-    global colorOfPlayer1
-    colorOfPlayer1 = colorchooser.askcolor(title="Choose color", initialcolor=colorOfPlayer1)[1]
-    background.itemconfig(chip1, fill=colorOfPlayer1)
-
-
-# öffnet das Coolor Chooser Menu für Spieler 2 und setzt die Farbe, wenn sie verändert wurde
-def chooseColorPlayer2():
-    global colorOfPlayer2
-    colorOfPlayer2 = colorchooser.askcolor(title="Choose color", initialcolor=colorOfPlayer2)[1]
-    background.itemconfig(chip2, fill=colorOfPlayer2)
-
-
-def deleteStartMenu():
-    global player1
-    global player2
-    global background
-    global vierGewinnt
-    global menu
-
-    background.delete(chip1)
-    background.delete(chip2)
-    background.delete(vierGewinnt)
-    startButton.destroy()
-    settingsMenu.deleteMenuButton()
-    tf_player1.destroy()
-    tf_player2.destroy()
-    settingsMenu.deleteMenuButton()
-    settingsMenu.deleteOptions()
-
-
-# Funktion fürs Starten vom Vier Gewinnt Spiel
-def startGame():
-    global player1
-    global player2
-    global background
-    global vierGewinnt
-    global menu
-
-    if player1.name != "" and player2.name != "":
-        player1.setName(tf_player1.get())
-        player2.setName(tf_player2.get())
-        player1.setPlayerColor(colorOfPlayer1)
-        player2.setPlayerColor(colorOfPlayer2)
-
-        # erstellt die Spieler Leiste und setzt die Variable
-        global playerListBar
-        playerListBar.createPlayerListBar()
-
-        setupSpielFeld()
-        createControlButtons()
-        menu.createMenuButton()
-
-        deleteStartMenu()
-
-        startButton2 = Button(gui, width=20, height=5, bg=buttonColor)
-        startButton2["text"] = "CPU"
-        startButton2["command"] = lambda: compGegner()
-        startButton2.place(x=1710, y=150)
-
-        checkRestart()
-
-    else:
-        print("Keine Namen sind gesetzt")
-
-
-# Überprüft, ob das Spiel restarted wurde → im Fall, das es restartet werden muss, werden die Startmenüelemente gelöscht
-def checkRestart():
-    global restarted
-    global menu
-    global settingsMenu
-    if restarted:
-        background.delete(chip1)
-        background.delete(chip2)
-        background.delete(vierGewinnt)
-        startButton.destroy()
-        tf_player1.destroy()
-        tf_player2.destroy()
-        settingsMenu.deleteMenuButton()
-        restarted = False
 
 
 # startet eine neue Runde
@@ -627,24 +869,18 @@ def nextRound():
         roundNumber = roundNumber + 1
         print('Round Number:', roundNumber)
         playerListBar.tauscheSpielerAnDerReihe()
+        onRoundStart()
 
 
-# alle Vierecke werden in einer Reihe zu einem Spielfeld zusammen gesetzt
-def setupSpielFeld():
-    global background
-    # x Koordinate Berechnung
-    for v in range(1, verticalFeldNumber):
-        # y Koordinate Berechnung
-        horizontalLineList = []
-        for h in range(1, horizontalFeldNumber):
-            feld = VierGewinntFeld(h, v)
-            horizontalLineList.append(feld)
-        spielfeld.append(horizontalLineList)
+def onRoundStart():
+    if spielerAnDerReihe.computerGegner:
+        row = random.randint(0, verticalFeldNumber - 1)
+        handlePlayerChip(row)
 
 
 # erstellt die Buttons, die in der Reihe einen neuen Chip hineinsetzten können
 def createControlButtons():
-    if settingsMenu.getButtonState(1, False):
+    if getButtonState(1, False):
         for y in range(1, verticalFeldNumber):
             createControlButton(y)
 
@@ -667,7 +903,7 @@ def createControlButton(row):
 
 # setzt den Chip an der richtigen stelle, damit die Physics funktionieren
 def handlePlayerChip(row):
-    feld: VierGewinntFeld = getPositonForChip(row)
+    feld: VierGewinntFeld = getPositionForChip(row)
     if feld is not None:
         if shouldPlaceChip:
             feld.placeChip(spielerAnDerReihe.getPlayerColor(), spielerAnDerReihe.getPlayerNumber())
@@ -676,7 +912,7 @@ def handlePlayerChip(row):
 
 
 # berechnet die richtige Stelle im Spielfeld für den Spielerchip
-def getPositonForChip(row):
+def getPositionForChip(row):
     felderReihe = getFelderReihe(row - 1)
     for feld in reversed(felderReihe):
         if feld.isEmpty():
@@ -708,85 +944,6 @@ def getPlayerNumberOfFeld(horizontaleNummer: int, vertikaleNummer: int):
         return 0
 
 
-# löscht alle Elemente, die im Spielmenü da sind
-def deleteInGameItems():
-    global menu
-    global background
-    global spielfeld
-    global buttons
-    global playerListBar
-    playerListBar.deletePlayerListBar()
-
-    for indexVertikal, listeVertikal in enumerate(spielfeld):
-        for indexHorizontal, viereck in enumerate(listeVertikal):
-            background.delete(viereck.feld)
-            viereck.deleteChip()
-
-    for i, button in enumerate(buttons):
-        button.destroy()
-
-    spielfeld.clear()
-    buttons.clear()
-    menu.deleteAllButtons()
-
-
-# erstellt nur das Start Menu
-def createStartMenu():
-    global tf_player1
-    global tf_player2
-    global chip1
-    global chip2
-    global startButton
-    global spielfeld
-    global vierGewinnt
-    global player1
-    global player2
-    global shouldPlaceChip
-
-    chip1 = createPlayerChip(background, 800, 310, 80, colorOfPlayer1)
-    chip2 = createPlayerChip(background, 800, 410, 80, colorOfPlayer2)
-
-    background.tag_bind(chip1, '<Button-1>', lambda a: chooseColorPlayer1())
-    background.tag_bind(chip2, '<Button-1>', lambda a: chooseColorPlayer2())
-
-    vierGewinnt = background.create_text(960, 200, text="Vier Gewinnt", fill="black", font=("Purisa", 100))
-
-    # Button und Textfeld code(Startbildschirm)
-
-    startButton = Button(gui, width=30, height=6, bg=buttonColor)
-    startButton["text"] = "Start"
-    startButton["command"] = lambda: startGame()
-    startButton.place(x=890, y=540)
-
-    tf_player1 = Entry(gui, bg=textFeldColor, width=25, font=("Purisa", 14))
-    tf_player1.place(x=900, y=340)
-    tf_player1.insert(0, 'Spieler 1')
-
-    tf_player2 = Entry(gui, bg=textFeldColor, width=25, font=("Purisa", 14))
-    tf_player2.place(x=900, y=440)
-    tf_player2.insert(0, 'Spieler 2')
-
-    shouldPlaceChip = True
-
-    settingsMenu.createButton()
-
-
-# geht zum Startmenü zurück
-def backToStartMenu():
-    global spielerAnDerReihe
-    global restarted
-    global roundNumber
-    global win
-
-    createStartMenu()
-    deleteInGameItems()
-
-    spielerAnDerReihe = player1
-    restarted = True
-    win = False
-    roundNumber = 0
-
-
 def restartGame():
     global playerListBar
     global spielerAnDerReihe
@@ -805,7 +962,7 @@ def restartGame():
             viereck: VierGewinntFeld
             if not viereck.isEmpty():
                 viereck.deleteChip()
-                viereck.setColor(defaultSpielfeldFarbe)
+                viereck.setColor(getTextfieldOption(3, defaultSpielfeldFarbe))
                 viereck.placeChip(backgroundColor, 0)
 
 
@@ -823,29 +980,34 @@ def winCheck(playerNumber: int):
 
 # Überprüft, ob jemand in einer Linie gewonnen hat
 def checkSingleLineClear(horizontaleNummer: int, vertikaleNummer: int, operationType: int, playerNumber: int):
-    feldWinListCheckOne: list[VierGewinntFeld] = []
+    # speichert mehrere Status, der jeweiligen Felder des operationTypes
+    firstCheckList: list[VierGewinntFeld] = []
+    # speichert die Felder ein, die von einem bestimmten Spieler besetzt wurden
     feldWinList: list[VierGewinntFeld] = []
+
     if operationType == 1:
         for index in range(connect):
-            feldWinListCheckOne.append(checkSingleFieldWin(horizontaleNummer, vertikaleNummer + index, playerNumber))
+            firstCheckList.append(checkSingleFieldWin(horizontaleNummer, vertikaleNummer + index, playerNumber))
     elif operationType == 2:
         for index in range(connect):
-            feldWinListCheckOne.append(checkSingleFieldWin(horizontaleNummer + index, vertikaleNummer, playerNumber))
+            firstCheckList.append(checkSingleFieldWin(horizontaleNummer + index, vertikaleNummer, playerNumber))
     elif operationType == 3:
         for index in range(connect):
-            feldWinListCheckOne.append(
+            firstCheckList.append(
                 checkSingleFieldWin(horizontaleNummer + index, vertikaleNummer + index, playerNumber))
     elif operationType == 4:
         for index in range(connect):
-            feldWinListCheckOne.append(
+            firstCheckList.append(
                 checkSingleFieldWin(horizontaleNummer - index, vertikaleNummer + index, playerNumber))
 
-    for index, feld in enumerate(feldWinListCheckOne):
+    # alle Felder die vom jeweiligem Spieler besetzt sind, in die erste Liste hinzufügen
+    for index, feld in enumerate(firstCheckList):
         if feld is not None:
             feldWinList.append(feld)
 
-    if len(feldWinList) == len(feldWinListCheckOne):
-        winScreen(playerNumberToPlayer(playerNumber))
+    # Überprüfung, ob die größe der ersten Checkliste genau der finalen Checkliste entspricht
+    if len(feldWinList) == len(firstCheckList):
+        currentScreen.addOverlayScreen(WinScreen(playerNumberToPlayer(playerNumber)))
         for index, feld in enumerate(feldWinList):
             feld.setColor('green')
         return True
@@ -853,6 +1015,7 @@ def checkSingleLineClear(horizontaleNummer: int, vertikaleNummer: int, operation
         return False
 
 
+# Wenn der Spieler dieses Feld besetzt hat, return diese Funktion das Feld - andererseits wird None returned
 def checkSingleFieldWin(horizontaleNummer: int, vertikaleNummer: int, playerNumber: int):
     feld = getFeld(horizontaleNummer, vertikaleNummer)
 
@@ -865,74 +1028,21 @@ def checkSingleFieldWin(horizontaleNummer: int, vertikaleNummer: int, playerNumb
         return None
 
 
-def winScreen(player: Player):
-    global shouldPlaceChip
-    global menu
-
-    print("Der Spieler: " + player.getName() + " hat gewonnen")
-
-    shouldPlaceChip = False
-
-    rectangle = background.create_rectangle(840, 450, 1080, 800, fill="#3A3A3A", outline='#6F6F6F')
-    text = background.create_text(960, 500, text="Der Spieler", fill="black", font=("Purisa", 20))
-    text2 = background.create_text(960, 535, text=player.getName(), fill=player.getPlayerColor(),
-                                   font=("Purisa", 20, "bold"))
-    text3 = background.create_text(960, 565, text="hat gewonnen", fill="black", font=("Purisa", 20))
-
-    menu.deleteAllButtons()
-
-    restartButton = Button(gui, width=25, height=4, bg=buttonColor)
-    restartButton["text"] = "Neustart"
-    restartButton["command"] = lambda: restartFromWinScreen(backButton, restartButton, rectangle, text, text2, text3)
-    restartButton.place(x=867, y=610)
-
-    backButton = Button(gui, width=25, height=4, bg=buttonColor)
-    backButton["text"] = "Zurück zum Startmenü"
-    backButton["command"] = lambda: backToStartMenuFromWinScreen(backButton, restartButton, rectangle, text, text2,
-                                                                 text3)
-    backButton.place(x=867, y=690)
-
-
-def backToStartMenuFromWinScreen(backButton: Button, restartButton: Button, rectangle, text, text2, text3):
-    global background
-
-    print("Successfuly Restartet")
-
-    backButton.destroy()
-    restartButton.destroy()
-    background.delete(rectangle)
-    background.delete(text)
-    background.delete(text2)
-    background.delete(text3)
-    backToStartMenu()
-
-
-def restartFromWinScreen(backButton: Button, restartButton: Button, rectangle, text, text2, text3):
-    global shouldPlaceChip
-    global menu
-
-    shouldPlaceChip = True
-    backButton.destroy()
-    restartButton.destroy()
-    background.delete(rectangle)
-    background.delete(text)
-    background.delete(text2)
-    background.delete(text3)
-    menu.createMenuButton()
-    restartGame()
-
-
 def compGegner():
-    row = random.randint(0, verticalFeldNumber - 1)
-    feld: VierGewinntFeld = getPositonForChip(row)
+    spielerAnDerReihe.computerGegner = True
+    onRoundStart()
 
-    print("Random CPU Row:", row)
 
-    if feld is not None:
-        if shouldPlaceChip:
-            feld.placeChip(spielerAnDerReihe.getPlayerColor(), spielerAnDerReihe.getPlayerNumber())
-        winCheck(spielerAnDerReihe.getPlayerNumber())
-        nextRound()
+#    row = random.randint(0, verticalFeldNumber - 1)
+#    feld: VierGewinntFeld = getPositonForChip(row)
+#
+#    print("Random CPU Row:", row)
+#
+#    if feld is not None:
+#        if shouldPlaceChip:
+#            feld.placeChip(spielerAnDerReihe.getPlayerColor(), spielerAnDerReihe.getPlayerNumber())
+#        winCheck(spielerAnDerReihe.getPlayerNumber())
+#        nextRound()
 
 
 gui.mainloop()
