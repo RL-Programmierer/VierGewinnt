@@ -4,7 +4,6 @@ import random
 
 gui = Tk()
 width, height = gui.winfo_screenwidth(), gui.winfo_screenheight()
-# gui.geometry("%dx%d+0+0" % (width, height))
 gui.geometry("%dx%d+0+0" % (width, height))
 gui.state('zoomed')
 gui.title('Vier Gewinnt')
@@ -925,7 +924,7 @@ def nextRound():
         if overlay is not None:
             overlay: PlayerListBar
             overlay.tauscheSpielerAnDerReihe()
-            if not isSpielfeldFull():
+            if not isSpielfeldVoll():
                 onRoundStart()
             else:
                 currentScreen.addOverlayScreen(WinScreen(Player("", "", 0)))
@@ -999,7 +998,7 @@ def getPlayerNumberOfFeld(horizontaleNummer: int, vertikaleNummer: int):
         return 0
 
 
-def isSpielfeldFull():
+def isSpielfeldVoll():
     fullRows = []
 
     for h, listOfObjects in enumerate(spielfeld):
