@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import colorchooser
 import random
-
+import time
 gui = Tk()
 width, height = gui.winfo_screenwidth(), gui.winfo_screenheight()
 gui.geometry("%dx%d+0+0" % (width, height))
@@ -203,19 +203,13 @@ class StartScreen(Screen):
     # öffnet das Color Chooser Menu für Spieler 1 und setzt die Farbe, wenn sie verändert wurde
     def chooseColorPlayer1(self):
         global colorOfPlayer1
-        global defaultColorOfPlayer1
-        color = colorchooser.askcolor(title="Choose color", initialcolor=defaultColorOfPlayer1)[1]
-        if color is not None:
-            colorOfPlayer1 = color
+        colorOfPlayer1 = colorchooser.askcolor(title="Choose color", initialcolor=colorOfPlayer1)[1]
         background.itemconfig(self.chip1, fill=colorOfPlayer1)
 
     # öffnet das Color Chooser Menu für Spieler 2 und setzt die Farbe, wenn sie verändert wurde
     def chooseColorPlayer2(self):
         global colorOfPlayer2
-        global defaultColorOfPlayer2
-        color = colorchooser.askcolor(title="Choose color", initialcolor=defaultColorOfPlayer2)[1]
-        if color is not None:
-            colorOfPlayer2 = color
+        colorOfPlayer2 = colorchooser.askcolor(title="Choose color", initialcolor=colorOfPlayer2)[1]
         background.itemconfig(self.chip2, fill=colorOfPlayer2)
 
 
@@ -237,12 +231,9 @@ class SpielfeldScreen(Screen):
 
     def __init__(self):
         super().__init__("SpielfeldScreen")
-        self.active = False
 
     def create(self):
         if player1.name != "" and player2.name != "":
-            self.active = True
-
             # alle Vierecke werden in einer Reihe zu einem Spielfeld zusammen gesetzt
             # x Koordinate Berechnung
             for v in range(1, int(getTextfieldOption(5, defaultVerticalFeldNumber))):
@@ -264,6 +255,10 @@ class SpielfeldScreen(Screen):
             startButton2["text"] = "CPU"
             startButton2["command"] = lambda: compGegner()
             startButton2.place(x=100, y=150)
+
+            # checkRestart()
+
+            onRoundStart()
         else:
             currentScreen.switchTo(StartScreen())
             print("Keine Namen sind gesetzt")
@@ -275,8 +270,6 @@ class SpielfeldScreen(Screen):
         global background
         global spielfeld
         global buttons
-
-        self.active = True
 
         for indexVertikal, listeVertikal in enumerate(spielfeld):
             for indexHorizontal, viereck in enumerate(listeVertikal):
@@ -307,23 +300,6 @@ class SyncedTextField:
         self.currentOption = defaultOption
         self.desc = desc
         self.maxChar = maxChar
-        self.textField = None
-        self.descItem = None
-
-    def on_validate(self, P):
-        if len(P) <= self.maxCharForEntry:
-            return True
-        else:
-            return False
-
-    def getCurrentOption(self):
-        if self.textField is not None:
-            self.currentOption = self.textField.get()
-            return self.textField.get()
-        else:
-            return self.currentOption
-
-    def create(self):
         self.textField: Entry = Entry(gui, bg=textFeldColor, width=self.w, font=self.font,
                                       validate='key', validatecommand=(gui.register(self.on_validate), '%P'))
         self.textField.place(x=self.x, y=self.y)
@@ -332,7 +308,19 @@ class SyncedTextField:
         descList: list[str] = [self.desc[i:i + self.maxChar] for i in range(0, len(self.desc), self.maxChar)]
         self.descItem = MultilineDescription(self.desc, self.maxChar, self.font, self.x + (self.w * 5.6),
                                              self.y - (len(descList) * 20))
-        return self
+
+    def on_validate(self, P):
+        if len(P) <= self.maxCharForEntry:  # Setze hier die maximale Anzahl von Zeichen
+            return True
+        else:
+            return False
+
+    def getCurrentOption(self):
+        if self.textField is not None:
+            self.currentOption = self.textField.get()
+            return self.currentOption
+        else:
+            return self.currentOption
 
     def destroy(self):
         self.textField.place_forget()
@@ -390,6 +378,7 @@ class SwitchStateButton:
 
     def create(self):
         if self.button is None:
+            print("recreate")
             self.button: Button = Button(gui, width=self.w, height=self.h, bg=self.color)
             self.button["text"] = str(self.states[self.currentState])
             self.button["command"] = lambda: self.switchState()
@@ -468,15 +457,15 @@ class Settings(Screen):
 
         if buttonDontExist(3):
             textField: SyncedTextField = SyncedTextField(7, 890, 200, 20, ('Purisa', 15), defaultSpielfeldFarbe,
-                                                         "Ändere die Farbe des Spielfelds", 50).create()
+                                                         "Ändere die Farbe des Spielfelds", 50)
 
             options.append(textField)
         else:
             options[3].show()
 
         if buttonDontExist(4):
-            textField: SyncedTextField = SyncedTextField(2, 890, 300, 20, ('Purisa', 15), defaultHorizontalFeldNumber,
-                                                         "Horizontal Spielfeldgröße", 50).create()
+            textField: SyncedTextField = SyncedTextField(2,  890, 300, 20, ('Purisa', 15), defaultHorizontalFeldNumber,
+                                                         "Horizontal Spielfeldgröße", 50)
 
             options.append(textField)
         else:
@@ -484,7 +473,7 @@ class Settings(Screen):
 
         if buttonDontExist(5):
             textField: SyncedTextField = SyncedTextField(2, 890, 400, 20, ('Purisa', 15), defaultVerticalFeldNumber,
-                                                         "Vertikale Spielfeldgröße", 50).create()
+                                                         "Vertikale Spielfeldgröße", 50)
 
             options.append(textField)
         else:
@@ -492,7 +481,7 @@ class Settings(Screen):
 
         if buttonDontExist(6):
             textField: SyncedTextField = SyncedTextField(2, 890, 500, 20, ('Purisa', 15), connect,
-                                                         "Gewinnüberprüfungsgröße", 50).create()
+                                                         "Gewinnüberprüfungsgröße", 50)
 
             options.append(textField)
         else:
@@ -518,6 +507,7 @@ class WinScreen(Screen):
 
     def create(self):
         global shouldPlaceChip
+        time.sleep(0.3)
 
         if self.winner.playerNumber == 0:
             print("Patt - Das Spielfeld ist voll!")
@@ -711,8 +701,6 @@ class PlayerListBar(Screen):
         else:
             print('Error!!! SpielerAnDerReihe:', spielerAnDerReihe)
 
-        checkComp()
-
         if spielerAnDerReihe.getPlayerNumber() == 1:
             background.itemconfig(self.Spieler1, fill=player1.getPlayerColor(), font=('Purisa', 18, 'bold'))
             background.itemconfig(self.Spieler2, fill=otherPlayerColor, font=('Purisa', 18))
@@ -852,9 +840,6 @@ canvas_width = 200
 canvas_height = 40
 
 # default Spieler Farben
-defaultColorOfPlayer1 = 'red'
-defaultColorOfPlayer2 = 'yellow'
-
 colorOfPlayer1 = 'red'
 colorOfPlayer2 = 'yellow'
 
@@ -941,24 +926,16 @@ def nextRound():
         if overlay is not None:
             overlay: PlayerListBar
             overlay.tauscheSpielerAnDerReihe()
-            if isSpielfeldVoll():
+            if not isSpielfeldVoll():
+                onRoundStart()
+            else:
                 currentScreen.addOverlayScreen(WinScreen(Player("", "", 0)))
 
 
-# ToDo: einen loop machen
-def checkComp():
+def onRoundStart():
     if spielerAnDerReihe.computerGegner:
-        gui.after(1000, lambda: handleComp())
-
-
-def handleComp():
-    row = random.randint(0, int(getTextfieldOption(5, defaultVerticalFeldNumber)) - 1)
-    feld: VierGewinntFeld = getPositionForChip(row)
-    if feld is not None:
-        if shouldPlaceChip:
-            feld.placeChip(spielerAnDerReihe.getPlayerColor(), spielerAnDerReihe.getPlayerNumber())
-            winCheck(spielerAnDerReihe.getPlayerNumber())
-            nextRound()
+        row = random.randint(0, int(getTextfieldOption(5, defaultVerticalFeldNumber)) - 1)
+        handlePlayerChip(row)
 
 
 # erstellt die Buttons, die in der Reihe einen neuen Chip hineinsetzten können
@@ -1067,10 +1044,11 @@ def restartGame():
 
 
 # allgemeine Gewinn Überprüfung
+# ToDo: Fix dynamische feld Nummern -> irgendwas mit der Größe stimmt nicht
 def winCheck(playerNumber: int):
     global win
-    for h in range(int(getTextfieldOption(5, defaultVerticalFeldNumber))):
-        for v in range(int(getTextfieldOption(4, defaultHorizontalFeldNumber))):
+    for h in range(int(getTextfieldOption(4, defaultHorizontalFeldNumber))):
+        for v in range(int(getTextfieldOption(5, defaultVerticalFeldNumber))):
             if (checkSingleLineClear(h, v, 1, playerNumber) == True
                     or checkSingleLineClear(h, v, 2, playerNumber) == True
                     or checkSingleLineClear(h, v, 3, playerNumber) == True
@@ -1130,7 +1108,19 @@ def checkSingleFieldWin(horizontaleNummer: int, vertikaleNummer: int, playerNumb
 
 def compGegner():
     spielerAnDerReihe.computerGegner = True
-    checkComp()
+    onRoundStart()
+
+
+#    row = random.randint(0, verticalFeldNumber - 1)
+#    feld: VierGewinntFeld = getPositonForChip(row)
+#
+#    print("Random CPU Row:", row)
+#
+#    if feld is not None:
+#        if shouldPlaceChip:
+#            feld.placeChip(spielerAnDerReihe.getPlayerColor(), spielerAnDerReihe.getPlayerNumber())
+#        winCheck(spielerAnDerReihe.getPlayerNumber())
+#        nextRound()
 
 
 gui.mainloop()
